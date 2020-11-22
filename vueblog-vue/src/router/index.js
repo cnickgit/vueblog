@@ -4,6 +4,9 @@ import Login from '../views/Login.vue'
 import Blogs from '../views/Blogs.vue'
 import BlogEdit from '../views/BlogEdit.vue'
 import BlogDetail from '../views/BlogDetail.vue'
+import HomePage from "@/home/homePage";
+import My from "@/page/my.vue";
+import AddTokenPage from "@/zyjHt/addTokenPage"
 
 Vue.use(VueRouter)
 
@@ -13,6 +16,26 @@ const routes = [
     name: 'Index',
     redirect: {name: "Blogs"}
   },
+  {
+    path: '/AddTokenPage',
+    name: 'AddTokenPage',
+    component: AddTokenPage
+  },
+  // {
+  //   path: '/',
+  //   name: 'HomePage',
+  //   component: HomePage
+  // },
+  // {
+  //   path: '/homePage',
+  //   name: 'HomePage',
+  //   component: HomePage
+  // },
+  // {
+  //   path: '/my',
+  //   name: 'My',
+  //   component: My
+  // },
   {
     path: '/blogs',
     name: 'Blogs',

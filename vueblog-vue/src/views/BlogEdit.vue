@@ -5,7 +5,7 @@
     <div class="m-content">
 
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="标题" prop="title">
+        <el-form-item label="类型" prop="title">
           <el-input v-model="ruleForm.title"></el-input>
         </el-form-item>
 
