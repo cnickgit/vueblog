@@ -11,31 +11,31 @@ import AddTokenPage from "@/zyjHt/addTokenPage"
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'Index',
-    redirect: {name: "Blogs"}
-  },
-  {
-    path: '/AddTokenPage',
-    name: 'AddTokenPage',
-    component: AddTokenPage
-  },
   // {
   //   path: '/',
-  //   name: 'HomePage',
-  //   component: HomePage
+  //   name: 'Index',
+  //   redirect: {name: "Blogs"}
   // },
   // {
-  //   path: '/homePage',
-  //   name: 'HomePage',
-  //   component: HomePage
+  //   path: '/AddTokenPage',
+  //   name: 'AddTokenPage',
+  //   component: AddTokenPage
   // },
-  // {
-  //   path: '/my',
-  //   name: 'My',
-  //   component: My
-  // },
+  {
+    path: '/',
+    name: 'HomePage',
+    component: HomePage
+  },
+  {
+    path: '/homePage',
+    name: 'HomePage',
+    component: HomePage
+  },
+  {
+    path: '/my',
+    name: 'My',
+    component: My
+  },
   {
     path: '/blogs',
     name: 'Blogs',

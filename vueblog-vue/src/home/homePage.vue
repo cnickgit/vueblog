@@ -2,39 +2,41 @@
     <div>
       <van-tabs type="card">
         <van-tab title="标签 1">
+          <div style="margin-top: 20px">
           <van-search
             v-model="searchName"
             placeholder="请输入搜索关键词"
             input-align="center"
           />
-          <div>
+          </div>
+          <div style="margin-top: 20px">
             <van-button round type="info" size="large" @click="search()">查询</van-button>
           </div>
-          <div v-if="false">
+          <div v-if="showResult">
             <van-row style="margin-top: 20px;" justify="center">
-              <van-col span="12">买家: 8</van-col>
-              <van-col span="12">实名认证: 8</van-col>
+              <van-col span="12">买家: {{data.aliimSim}}****</van-col>
+              <van-col span="12">实名认证: {{data.nameconform_word}}</van-col>
             </van-row>
             <van-row style="margin-top: 20px;" justify="center">
-              <van-col span="12">买家信誉: 8</van-col>
-              <van-col span="12">注册日期: 8</van-col>
+              <van-col span="12">买家信誉: {{data.buyerCre}}</van-col>
+              <van-col span="12">注册日期: {{data.created}}</van-col>
             </van-row>
             <van-row style="margin-top: 20px;" justify="center">
-              <van-col span="12">商家信誉: 8</van-col>
-              <van-col span="12">	淘龄: 8</van-col>
+              <van-col span="12">商家信誉: {{data.sellerCredit}}</van-col>
+              <van-col span="12">	淘龄: {{data.registDay}}</van-col>
             </van-row>
             <van-row style="margin-top: 20px;" justify="center">
-              <van-col span="12">性别: 8</van-col>
-              <van-col span="12">	买家总周平均: 8</van-col>
+              <van-col span="12">性别: {{data.sex}}</van-col>
+              <van-col span="12">	买家总周平均: {{data.buyerAvg}}</van-col>
             </van-row>
             <van-row style="margin-top: 20px;" justify="center">
-              <van-col span="12">好评率: 8</van-col>
+              <van-col span="12">好评率: {{data.received_rate}}</van-col>
             </van-row>
             <van-row style="margin-top: 20px;" justify="center">
-              <van-col span="12">查询时间: 8</van-col>
+              <van-col span="12">查询时间: {{data.queryTime}}</van-col>
             </van-row>
           </div>
-          <div v-if="true">
+          <div v-if="showDefault">
             <van-row class="content">
               <van-col span="24">兔子：拿完了商家的返款就恶意退款</van-col>
             </van-row>
@@ -65,7 +67,7 @@
 </template>
 
 <script>
-    import { Loading,Tab,Tabs,Search,Tabbar,TabbarItem,Button,Col, Row  } from 'vant'
+    import { Loading,Tab,Tabs,Search,Tabbar,TabbarItem,Button,Col, Row, Toast} from 'vant'
     export default {
         name: "homePage",
         components: {
@@ -77,18 +79,28 @@
             [TabbarItem.name]: TabbarItem,
             [Button.name]: Button,
             [Col.name]: Col,
-            [Row.name]: Row
+            [Row.name]: Row,
+            [Toast.name]: Toast
         },
        data(){
           return {
+              showDefault: true,
+              showResult: false,
               active: 0,
               searchName: '',
+              data: {},
           }
        },
        methods: {
            search(){
-             this.$axios.get("/search").then(res => {
-               console.log("res:",res)
+             this.$axios.get("/search?searchName="+this.searchName).then(res => {
+               this.showDefault = false;
+               this.showResult = true;
+                 if(res.data.data == '账号不存在'){
+                   Toast.fail("账号不存在")
+                 }else{
+                   this.data = res.data.data;
+                 }
              })
            },
            login(){
@@ -99,7 +111,7 @@
            }
        },
        created() {
-          this.login();
+          // this.login();
        }
     }
 </script>
@@ -107,5 +119,6 @@
 <style scoped>
 .content{
   margin-top: 20px;
+  margin-left: 30px;
 }
 </style>
