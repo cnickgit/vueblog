@@ -58,8 +58,12 @@ public class ZyjController {
             zyjToken.setMoney(25);
             zyjToken.setTypeRemarks("25元 200次 不限制时间");
         }
-        zyjTokenMapper.insert(zyjToken);
-        return null;
+        int i = zyjTokenMapper.insert(zyjToken);
+        if(i>0){
+            return Result.succ("新增成功");
+        }else{
+            return Result.fail("新增失败");
+        }
     }
 
     @GetMapping(value = "/enableToken")
@@ -89,6 +93,12 @@ public class ZyjController {
         }
         zyjTokenMapper.updateById(zyjToken);
         return null;
+    }
+
+    @GetMapping(value="/tokens")
+    public Result getTokens(){
+        List<ZyjToken> zyjTokens = zyjTokenMapper.queryAllTokens();
+        return Result.succ(zyjTokens);
     }
 
 
