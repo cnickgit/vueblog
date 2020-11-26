@@ -1,11 +1,14 @@
 package com.markerhub.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.markerhub.common.lang.Result;
+import com.markerhub.constant.PcConstant;
 import com.markerhub.entity.ZyjToken;
+import com.markerhub.mapper.ZyjTokenMapper;
+import com.markerhub.util.TimeUtil;
 import com.markerhub.vo.AddTokenVo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,18 +18,76 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 public class ZyjController {
 
-    @PostMapping(value = "/addToken")
-    public Result addZyjToken(@RequestBody AddTokenVo addTokenVo){
+    @Autowired
+    private ZyjTokenMapper zyjTokenMapper;
+
+    @GetMapping(value = "/addToken")
+    public Result addZyjToken(@RequestParam("type") String type){
+//        @RequestBody AddTokenVo addTokenVo
         ZyjToken zyjToken = new ZyjToken();
         zyjToken.setId(UUID.randomUUID().toString());
-        BeanUtils.copyProperties(addTokenVo,zyjToken);
+        zyjToken.setType(type);
+        zyjToken.setCode(UUID.randomUUID().toString());
+        zyjToken.setCreateTime(new Date());
+        zyjToken.setUpdateTime(new Date());
+        zyjToken.setEnable("0");
+        if(PcConstant.TYPE_ONE.equals(type)){
+            zyjToken.setPrescription(5);
+            zyjToken.setMoney(1);
+            zyjToken.setTypeRemarks("1元 5次 24小时有效");
+        }else if(PcConstant.TYPE_THREE.equals(type)){
+            zyjToken.setPrescription(30);
+            zyjToken.setMoney(3);
+            zyjToken.setTypeRemarks("3元 30次 24小时有效");
+        }else if(PcConstant.TYPE_FIVE.equals(type)){
+            zyjToken.setPrescription(60);
+            zyjToken.setMoney(5);
+            zyjToken.setTypeRemarks("5元 60次 24小时有效");
+        }else if(PcConstant.TYPE_EVENGHT.equals(type)){
+            zyjToken.setPrescription(50);
+            zyjToken.setMoney(8);
+            zyjToken.setTypeRemarks("8元 50次 不限制时间");
+        }else if(PcConstant.TYPE_TYEFIVE.equals(type)){
+            zyjToken.setPrescription(200);
+            zyjToken.setMoney(25);
+            zyjToken.setTypeRemarks("25元 200次 不限制时间");
+        }
+        zyjTokenMapper.insert(zyjToken);
+        return null;
+    }
+
+    @GetMapping(value = "/enableToken")
+    public Result enableZyjToken(@RequestParam("id") String id){
+        ZyjToken zyjToken = zyjTokenMapper.selectById(id);
+        if(PcConstant.TYPE_ONE.equals(zyjToken.getType())){
+            Calendar cal = Calendar.getInstance();
+            zyjToken.setEnableTime(cal.getTime());
+            cal.add(Calendar.DATE, 1);//增加一天
+            zyjToken.setEndTime(cal.getTime());
+            zyjToken.setEnable("1");
+        }else if(PcConstant.TYPE_THREE.equals(zyjToken.getType())){
+            Calendar cal = Calendar.getInstance();
+            zyjToken.setEnableTime(cal.getTime());
+            cal.add(Calendar.DATE, 1);//增加一天
+            zyjToken.setEndTime(cal.getTime());
+            zyjToken.setEnable("1");
+        }else if(PcConstant.TYPE_FIVE.equals(zyjToken.getType())){
+            Calendar cal = Calendar.getInstance();
+            zyjToken.setEnableTime(cal.getTime());
+            cal.add(Calendar.DATE, 1);//增加一天
+            zyjToken.setEndTime(cal.getTime());
+            zyjToken.setEnable("1");
+        }else if(PcConstant.TYPE_EVENGHT.equals(zyjToken.getType())){
+
+        }else if(PcConstant.TYPE_TYEFIVE.equals(zyjToken.getType())){
+        }
+        zyjTokenMapper.updateById(zyjToken);
         return null;
     }
 

@@ -6,11 +6,5 @@ import java.io.Serializable;
 
 @Data
 public class AddTokenVo implements Serializable {
-
     private String type;
-
-    private Integer queryNumber;
-
-    private Integer timeCount;
-
 }
