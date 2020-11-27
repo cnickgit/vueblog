@@ -19,7 +19,12 @@
     <select id="queryEnableToken" resultType="com.markerhub.entity.ZyjToken">
         select * from zyj_token where enable = '1'
     </select>
+
     <select id="queryAllTokens" resultType="com.markerhub.entity.ZyjToken">
         select * from zyj_token where enable = #{enableType}
+    </select>
+
+    <select id="queryTokenByCode" resultType="com.markerhub.entity.ZyjToken">
+        select * from zyj_token where code = #{code} and enable = '1'
     </select>
 </mapper>

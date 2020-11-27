@@ -70,6 +70,9 @@
                 this.currIndex = index;
                 this.$router.push(val);
             }
+        },
+        created(){
+            this.$router.push('/homePage')
         }
     };
 </script>

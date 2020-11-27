@@ -131,7 +131,11 @@ public class ZyjController {
     }
 
     @GetMapping(value = "/search")
-    public Result zySearch(@RequestParam("searchName") String searchName){
+    public Result zySearch(@RequestParam("searchName") String searchName,@RequestParam("code") String code){
+        ZyjToken token = zyjTokenMapper.queryTokenByCode(code);
+        if(token == null || token.getPrescription() < 1){
+            return null;
+        }
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://139.159.141.200/app/superscanPH/opQuery.jsp";
         HttpHeaders headers = new HttpHeaders();
@@ -145,6 +149,8 @@ public class ZyjController {
         map.add("aliim", searchName);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
         ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
+        token.setPrescription(token.getPrescription() -1);
+        zyjTokenMapper.updateById(token);
         System.out.println(response.getBody());
         return Result.succ(JSONObject.parseObject(response.getBody()));
     }
