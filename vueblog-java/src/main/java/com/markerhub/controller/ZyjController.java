@@ -96,8 +96,8 @@ public class ZyjController {
     }
 
     @GetMapping(value="/tokens")
-    public Result getTokens(){
-        List<ZyjToken> zyjTokens = zyjTokenMapper.queryAllTokens();
+    public Result getTokens(@RequestParam("enableType") String enableType){
+        List<ZyjToken> zyjTokens = zyjTokenMapper.queryAllTokens(enableType);
         return Result.succ(zyjTokens);
     }
 

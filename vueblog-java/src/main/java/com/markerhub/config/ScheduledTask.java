@@ -30,7 +30,8 @@ public class ScheduledTask {
             System.out.println("time:"+token.getEndTime());
             if(cal.getTime().compareTo(token.getEndTime()) > 0 ){
                 System.out.println("token过期了");
-                token.setEnable("0");
+                //已过期
+                token.setEnable("2");
                 zyjTokenMapper.updateById(token);
             }
         }
