@@ -11,6 +11,9 @@
     name: 'App',
     components: {
       tabbar
+    },
+    created() {
+      console.log(this.$route.query.code)
     }
   }
 </script>
