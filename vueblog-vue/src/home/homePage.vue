@@ -111,6 +111,7 @@
            }
        },
        created() {
+          console.log(this.$route.query.code)
           // this.login();
        }
     }
