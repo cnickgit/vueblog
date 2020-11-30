@@ -12,4 +12,6 @@ public interface ZyjTokenMapper extends BaseMapper<ZyjToken> {
     public List<ZyjToken> queryAllTokens(@Param("enableType") String enableType);
 
     public ZyjToken queryTokenByCode(@Param("code") String code);
+
+    Integer insertBatch(@Param("tokens") List<ZyjToken> zyjTokens);
 }
