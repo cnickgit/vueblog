@@ -6,26 +6,26 @@ import BlogEdit from '../views/BlogEdit.vue'
 import BlogDetail from '../views/BlogDetail.vue'
 import HomePage from "@/home/homePage";
 import My from "@/page/my.vue";
-import AddTokenPage from "@/zyjHt/addTokenPage"
+import login from "@/components/Login.vue";
 
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Index',
-  //   redirect: {name: "Blogs"}
-  // },
+  {
+    path: '/login',
+    name: 'Login',
+    component: login
+  },
   // {
   //   path: '/AddTokenPage',
   //   name: 'AddTokenPage',
   //   component: AddTokenPage
   // },
-  {
-    path: '/',
-    name: 'HomePage',
-    component: HomePage
-  },
+  // {
+  //   path: '/',
+  //   name: 'HomePage',
+  //   component: HomePage
+  // },
   {
     path: '/homePage',
     name: 'HomePage',

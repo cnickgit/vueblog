@@ -72,7 +72,7 @@
             }
         },
         created(){
-            this.$router.push('/homePage')
+            // this.$router.push('/homePage')
         }
     };
 </script>
