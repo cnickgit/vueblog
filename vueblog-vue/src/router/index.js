@@ -34,7 +34,7 @@ const routes = [
     name: 'HomePage',
     component: HomePage,
     meta: {
-          showTab:false
+          showTab:true
     }
   },
   {
@@ -42,7 +42,7 @@ const routes = [
     name: 'My',
     component: My,
     meta: {
-          showTab:false
+          showTab:true
     }
   },
   {

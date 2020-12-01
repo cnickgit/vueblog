@@ -75,6 +75,9 @@ public class ZyjController {
     @GetMapping(value = "/enableToken")
     public Result enableZyjToken(@RequestParam("id") String id){
         ZyjToken zyjToken = zyjTokenMapper.selectById(id);
+        if(null == zyjToken){
+            return Result.fail("激活码无效");
+        }
         if(PcConstant.TYPE_ONE.equals(zyjToken.getType())){
             Calendar cal = Calendar.getInstance();
             zyjToken.setEnableTime(cal.getTime());
