@@ -1,14 +1,14 @@
 <template>
     <div>
-        <div>
+        <div style="margin-top: 200px">
             <van-cell-group>
                 <van-field v-model.trim="token" label="" placeholder="请输入激活码" />
             </van-cell-group>
         </div>
-        <div>
+        <div style="margin-top: 20px;margin-left: 100px;">
             <van-row>
                 <van-col span="12">
-                    <van-button type="info" @click="login">登录</van-button>
+                    <van-button size="large" type="info" @click="login">登录</van-button>
                 </van-col>
             </van-row>
 
