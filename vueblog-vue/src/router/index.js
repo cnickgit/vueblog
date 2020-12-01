@@ -14,7 +14,10 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: login
+    component: login,
+    meta: {
+          showTab:false
+    }
   },
   // {
   //   path: '/AddTokenPage',
@@ -29,12 +32,18 @@ const routes = [
   {
     path: '/homePage',
     name: 'HomePage',
-    component: HomePage
+    component: HomePage,
+    meta: {
+          showTab:false
+    }
   },
   {
     path: '/my',
     name: 'My',
-    component: My
+    component: My,
+    meta: {
+          showTab:false
+    }
   },
   {
     path: '/blogs',

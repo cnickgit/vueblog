@@ -1,7 +1,7 @@
 <template>
     <div>
         <van-cell-group>
-            <van-field v-model.trim="token" label="文本" placeholder="请输入激活码" />
+            <van-field v-model.trim="token" label="" placeholder="请输入激活码" />
         </van-cell-group>
         <van-row>
             <van-col span="12">
@@ -37,7 +37,7 @@
                 this.$axios.get('/enableToken?id='+this.token).then((res) => {
                     console.log("data:",res.data.data)
                     if(res.data.code == 200){
-                        this.$router.push({ name: 'Login'})
+                        this.$router.push({ name: 'HomePage'})
                     }
                 })
             }
