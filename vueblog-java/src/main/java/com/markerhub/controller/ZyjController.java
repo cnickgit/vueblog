@@ -19,7 +19,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -73,8 +72,9 @@ public class ZyjController {
     }
 
     @GetMapping(value = "/enableToken")
-    public Result enableZyjToken(@RequestParam("id") String id){
-        ZyjToken zyjToken = zyjTokenMapper.selectById(id);
+    public Result enableZyjToken(@RequestParam("code") String code){
+//        ZyjToken zyjToken = zyjTokenMapper.selectById(id);
+        ZyjToken zyjToken = zyjTokenMapper.queryToken(code);
         if(null == zyjToken){
             return Result.fail("激活码无效");
         }
@@ -168,6 +168,7 @@ public class ZyjController {
     @GetMapping(value = "/search")
     public Result zySearch(@RequestParam("searchName") String searchName,@RequestParam("code") String code){
         ZyjToken token = zyjTokenMapper.queryTokenByCode(code);
+//        ZyjToken token = zyjTokenMapper.selectById(code);
         if(token == null || token.getPrescription() < 1){
             return null;
         }
@@ -176,7 +177,7 @@ public class ZyjController {
         HttpHeaders headers = new HttpHeaders();
         List<String> cookies =new ArrayList<String>();
         /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
-        cookies.add("UM_distinctid=1757d88999410f-02e5f5298d538d-c781f38-100200-1757d889995401; JSESSIONID=1C1ECA44F2C7976D500A6488A5B34CBB; CNZZDATA4962612=cnzz_eid%3D1937187844-1606304311-http%253A%252F%252F139.159.141.200%252F%26ntime%3D1606304311; CNZZDATA1276815554=1646318526-1606304320-http%253A%252F%252F139.159.141.200%252F%7C1606304320; CNZZDATA1277894835=1541360565-1604126342-http%253A%252F%252F139.159.141.200%252F%7C1606303281");       //在 header 中存入cookies
+        cookies.add("JSESSIONID=E21DAB7267AC55081C9BB75603DFF09B; UM_distinctid=1762bcd58ef9-0f9fbb83517fa6-5c173a1b-100200-1762bcd58f071; CNZZDATA1277894835=612571021-1607050831-http%253A%252F%252F139.159.141.200%252F%7C1607050831");       //在 header 中存入cookies
         headers.put(HttpHeaders.COOKIE,cookies);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
