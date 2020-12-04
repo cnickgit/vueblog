@@ -10,15 +10,16 @@ import login from "@/components/Login.vue";
 
 Vue.use(VueRouter)
 
+
 const routes = [
-  {
-    path: '/login',
-    name: 'Login',
-    component: login,
-    meta: {
-          showTab:false
-    }
-  },
+  // {
+  //   path: '/',
+  //   name: 'Login',
+  //   component: login,
+  //   meta: {
+  //         showTab:false
+  //   }
+  // },
   // {
   //   path: '/AddTokenPage',
   //   name: 'AddTokenPage',
@@ -30,7 +31,7 @@ const routes = [
   //   component: HomePage
   // },
   {
-    path: '/homePage',
+    path: '/',
     name: 'HomePage',
     component: HomePage,
     meta: {
