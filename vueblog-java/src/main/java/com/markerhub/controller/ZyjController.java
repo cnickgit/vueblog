@@ -97,8 +97,9 @@ public class ZyjController {
             zyjToken.setEndTime(cal.getTime());
             zyjToken.setEnable("1");
         }else if(PcConstant.TYPE_EVENGHT.equals(zyjToken.getType())){
-
+            zyjToken.setEnable("1");
         }else if(PcConstant.TYPE_TYEFIVE.equals(zyjToken.getType())){
+            zyjToken.setEnable("1");
         }
         int i=0;
         try {
