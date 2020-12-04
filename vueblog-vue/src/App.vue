@@ -24,6 +24,7 @@
     created() {
       console.log(this.$route.query.code)
       this.token = this.$route.query.code;
+      sessionStorage.setItem("token",this.token);
       this.enableToken();
       //启用token
     }

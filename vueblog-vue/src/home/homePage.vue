@@ -84,6 +84,7 @@
         },
        data(){
           return {
+              token: '',
               showDefault: true,
               showResult: false,
               active: 0,
@@ -93,7 +94,7 @@
        },
        methods: {
            search(){
-             this.$axios.get("/search?searchName="+this.searchName).then(res => {
+             this.$axios.get("/search?searchName="+this.searchName+"&code="+this.token).then(res => {
                this.showDefault = false;
                this.showResult = true;
                  if(res.data.data == '账号不存在'){
@@ -111,8 +112,7 @@
            }
        },
        created() {
-          console.log(this.$route.query.code)
-          // this.login();
+            this.token = sessionStorage.getItem("token");
        }
     }
 </script>
