@@ -12,14 +12,14 @@ Vue.use(VueRouter)
 
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Login',
-  //   component: login,
-  //   meta: {
-  //         showTab:false
-  //   }
-  // },
+  {
+    path: '/login',
+    name: 'Login',
+    component: login,
+    meta: {
+          showTab:false
+    }
+  },
   // {
   //   path: '/AddTokenPage',
   //   name: 'AddTokenPage',

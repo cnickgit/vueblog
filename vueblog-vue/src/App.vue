@@ -14,9 +14,11 @@
     },
     methods: {
       enableToken(){
-        this.$axios.get('/enableToken?id='+this.token).then((res) => {
+        this.$axios.get('/enableToken?code='+this.token).then((res) => {
           if(res.data.code == 200){
             console.log("res:",res)
+          }else{
+            this.$router.push({ name: 'Login'})
           }
         })
       }
@@ -25,8 +27,11 @@
       console.log(this.$route.query.code)
       this.token = this.$route.query.code;
       sessionStorage.setItem("token",this.token);
-      this.enableToken();
-      //启用token
+      if(this.token == undefined){
+        this.$router.push({ name: 'Login'})
+      }else{
+        this.enableToken();
+      }
     }
   }
 </script>

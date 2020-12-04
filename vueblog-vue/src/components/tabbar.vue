@@ -33,7 +33,7 @@
                 active: 0,
                 tabbars: [
                     {
-                        name: "/homePage",
+                        name: "/",
                         title: "首页",
                         normal: require('@/assets/home_ico_active.png'),
                         active: 0

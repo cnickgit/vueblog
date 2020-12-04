@@ -113,6 +113,9 @@
        },
        created() {
             this.token = sessionStorage.getItem("token");
+            if(this.token == undefined){
+              this.$router.push({ name: 'login'})
+            }
        }
     }
 </script>
