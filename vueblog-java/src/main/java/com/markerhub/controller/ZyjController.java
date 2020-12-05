@@ -78,28 +78,36 @@ public class ZyjController {
         if(null == zyjToken){
             return Result.fail("激活码无效");
         }
-        if(PcConstant.TYPE_ONE.equals(zyjToken.getType())){
-            Calendar cal = Calendar.getInstance();
-            zyjToken.setEnableTime(cal.getTime());
-            cal.add(Calendar.DATE, 1);//增加一天
-            zyjToken.setEndTime(cal.getTime());
-            zyjToken.setEnable("1");
-        }else if(PcConstant.TYPE_THREE.equals(zyjToken.getType())){
-            Calendar cal = Calendar.getInstance();
-            zyjToken.setEnableTime(cal.getTime());
-            cal.add(Calendar.DATE, 1);//增加一天
-            zyjToken.setEndTime(cal.getTime());
-            zyjToken.setEnable("1");
-        }else if(PcConstant.TYPE_FIVE.equals(zyjToken.getType())){
-            Calendar cal = Calendar.getInstance();
-            zyjToken.setEnableTime(cal.getTime());
-            cal.add(Calendar.DATE, 1);//增加一天
-            zyjToken.setEndTime(cal.getTime());
-            zyjToken.setEnable("1");
-        }else if(PcConstant.TYPE_EVENGHT.equals(zyjToken.getType())){
-            zyjToken.setEnable("1");
-        }else if(PcConstant.TYPE_TYEFIVE.equals(zyjToken.getType())){
-            zyjToken.setEnable("1");
+        if(PcConstant.ENABLE_YES.equals(zyjToken.getEnable())){
+            return Result.succ("激活码有效");
+        }
+        if(PcConstant.ENABLE_EXPIRE.equals(zyjToken.getEnable())){
+            return Result.succ("激活码已过期");
+        }
+        if(PcConstant.ENABLE_NO.equals(zyjToken.getEnable())){
+            if(PcConstant.TYPE_ONE.equals(zyjToken.getType())){
+                Calendar cal = Calendar.getInstance();
+                zyjToken.setEnableTime(cal.getTime());
+                cal.add(Calendar.DATE, 1);//增加一天
+                zyjToken.setEndTime(cal.getTime());
+                zyjToken.setEnable("1");
+            }else if(PcConstant.TYPE_THREE.equals(zyjToken.getType())){
+                Calendar cal = Calendar.getInstance();
+                zyjToken.setEnableTime(cal.getTime());
+                cal.add(Calendar.DATE, 1);//增加一天
+                zyjToken.setEndTime(cal.getTime());
+                zyjToken.setEnable("1");
+            }else if(PcConstant.TYPE_FIVE.equals(zyjToken.getType())){
+                Calendar cal = Calendar.getInstance();
+                zyjToken.setEnableTime(cal.getTime());
+                cal.add(Calendar.DATE, 1);//增加一天
+                zyjToken.setEndTime(cal.getTime());
+                zyjToken.setEnable("1");
+            }else if(PcConstant.TYPE_EVENGHT.equals(zyjToken.getType())){
+                zyjToken.setEnable("1");
+            }else if(PcConstant.TYPE_TYEFIVE.equals(zyjToken.getType())){
+                zyjToken.setEnable("1");
+            }
         }
         int i=0;
         try {

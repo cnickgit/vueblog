@@ -31,4 +31,19 @@ public class  PcConstant {
      * 25元 200次 不限制时间
      */
     public final static String TYPE_TYEFIVE = "5";
+
+    /**
+     * 未启用
+     */
+    public final static String ENABLE_NO = "0";
+
+    /**
+     * 已启用
+     */
+    public final static String ENABLE_YES = "1";
+
+    /**
+     * 已过期
+     */
+    public final static String ENABLE_EXPIRE = "2";
 }
