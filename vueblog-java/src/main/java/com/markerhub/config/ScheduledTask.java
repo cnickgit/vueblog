@@ -28,7 +28,7 @@ public class ScheduledTask {
         Calendar cal = Calendar.getInstance();
         for(ZyjToken token : zyjTokens){
             System.out.println("time:"+token.getEndTime());
-            if(cal.getTime().compareTo(token.getEndTime()) > 0 ){
+            if(cal.getTime().compareTo(token.getEndTime()) > 0 || token.getPrescription() < 1){
                 System.out.println("token过期了");
                 //已过期
                 token.setEnable("2");

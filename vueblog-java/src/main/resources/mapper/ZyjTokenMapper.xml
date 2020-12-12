@@ -31,7 +31,7 @@
     </select>
 
     <select id="queryAllTokens" resultType="com.markerhub.entity.ZyjToken">
-        select * from zyj_token where enable = #{enableType}
+        select * from zyj_token where enable = #{enableType} order by create_time
     </select>
 
     <select id="queryToken" resultType="com.markerhub.entity.ZyjToken">
@@ -40,5 +40,11 @@
 
     <select id="queryTokenByCode" resultType="com.markerhub.entity.ZyjToken">
         select * from zyj_token where code = #{code} and enable = '1'
+    </select>
+
+    <select id="getMoney" resultType="com.markerhub.entity.Money">
+        select
+	(SELECT sum(money) FROM zyj_token WHERE YEAR(end_time) = YEAR(NOW())  and enable = '2') as currentMonthMoney,
+	(SELECT sum(money) FROM zyj_token WHERE YEAR(end_time) = YEAR(NOW())  and enable = '2') as currentYearMoney
     </select>
 </mapper>

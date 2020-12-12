@@ -1,6 +1,7 @@
 package com.markerhub.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.markerhub.entity.Money;
 import com.markerhub.entity.ZyjToken;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,4 +17,6 @@ public interface ZyjTokenMapper extends BaseMapper<ZyjToken> {
     public ZyjToken queryToken(@Param("code") String code);
 
     Integer insertBatch(@Param("tokens") List<ZyjToken> zyjTokens);
+
+    Money getMoney();
 }
