@@ -17,7 +17,7 @@
 </template>
 
 <script>
-    import { Field , Button , Row , Cell, CellGroup ,Col} from 'vant'
+    import {Field, Button, Row, Cell, CellGroup, Col, Toast} from 'vant'
     export default {
         name: "Login",
         components: {
@@ -34,14 +34,26 @@
             }
         },
         methods:{
+            getCookie(){
+                this.$axios.get("/zyjLogin").then(res => {
+                    console.log("res:",res)
+                    if(res != null){
+                        this.cookie = res.data.data;
+                        this.$router.push({ name: 'HomePage',query: {code: this.token,cookie: this.cookie}})
+                    }else{
+                        Toast.fail("激活码失效请联系客服")
+                    }
+                })
+            },
             login(){
                 this.enableToken();
             },
             enableToken(){
-                this.$axios.get('/enableToken?id='+this.token).then((res) => {
+                this.$axios.get('/enableToken?code='+this.token).then((res) => {
                     console.log("data:",res.data.data)
                     if(res.data.code == 200){
-                        this.$router.push({ name: 'HomePage'})
+                        this.getCookie();
+                        // this.$router.push({ name: 'HomePage',query: {code: this.token}})
                     }
                 })
             }

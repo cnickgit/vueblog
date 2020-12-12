@@ -7,16 +7,32 @@
 
 <script>
   import tabbar from './components/tabbar.vue';
+  import {Toast} from "vant";
   export default {
     name: 'App',
     components: {
       tabbar
     },
+    data(){
+      return {
+        token: '',
+      }
+    },
     methods: {
+      getCookie(){
+        this.$axios.get("/zyjLogin").then(res => {
+          if(res != null){
+            this.cookie = res.data.data;
+            this.$router.push({ name: 'HomePage',query: {code: this.token,cookie: this.cookie}})
+          }else{
+            Toast.fail("激活码失效请联系客服")
+          }
+        })
+      },
       enableToken(){
         this.$axios.get('/enableToken?code='+this.token).then((res) => {
           if(res.data.code == 200){
-            console.log("res:",res)
+            this.getCookie();
           }else{
             this.$router.push({ name: 'Login'})
           }
@@ -26,7 +42,6 @@
     created() {
       console.log(this.$route.query.code)
       this.token = this.$route.query.code;
-      sessionStorage.setItem("token",this.token);
       if(this.token == undefined){
         this.$router.push({ name: 'Login'})
       }else{
