@@ -9,6 +9,7 @@
         <result column="type_remarks" property="typeRemarks" />
         <result column="money" property="money" />
         <result column="prescription" property="prescription" />
+        <result column="remaining_times" property="remainingTimes" />
         <result column="enable" property="enable" />
         <result column="enable_time" property="enableTime" />
         <result column="end_time" property="endTime" />
@@ -22,7 +23,7 @@
         <foreach collection="tokens" item="item" index="index" separator=",">
             (#{item.id},#{item.code},#{item.type},#{item.typeRemarks},
             #{item.money},#{item.prescription},#{item.enable},#{item.enableTime},
-            #{item.endTime},#{item.createTime},#{item.updateTime})
+            #{item.endTime},#{item.createTime},#{item.updateTime},#{item.remainingTimes})
         </foreach>
     </insert>
 

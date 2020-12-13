@@ -3,7 +3,9 @@ package com.markerhub.controller;
 
 import com.markerhub.common.lang.Result;
 import com.markerhub.entity.User;
+import com.markerhub.entity.ZyjUser;
 import com.markerhub.service.UserService;
+import com.markerhub.service.ZyjUserService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +26,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    ZyjUserService zyjUserService;
+
     @RequiresAuthentication
     @GetMapping("/index")
     public Result index() {
@@ -36,4 +41,13 @@ public class UserController {
         return Result.succ(user);
     }
 
+    @PostMapping("/add")
+    public Result add(@RequestBody ZyjUser zyjUser){
+        return zyjUserService.addZyjUser(zyjUser);
+    }
+
+    @GetMapping("/zyjUsers")
+    public Result findUsers(){
+        return zyjUserService.findZyjUsers();
+    }
 }

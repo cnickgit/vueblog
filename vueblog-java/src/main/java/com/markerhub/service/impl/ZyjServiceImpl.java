@@ -29,7 +29,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
     @Override
     public Result searchZyj(String searchName, String code, String cookie) {
         ZyjToken token = zyjTokenMapper.queryTokenByCode(code);
-        if(token == null || token.getPrescription() < 1){
+        if(token == null || token.getRemainingTimes() < 1){
             return Result.fail("激活码失效");
         }
         RestTemplate restTemplate = new RestTemplate();
@@ -46,7 +46,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
         map.add("aliim", searchName);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
         ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
-        token.setPrescription(token.getPrescription() -1);
+        token.setRemainingTimes(token.getPrescription() -1);
         zyjTokenMapper.updateById(token);
         System.out.println("body:"+response.getBody());
         Object parse = JSONObject.parse(response.getBody());
@@ -84,5 +84,17 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
     public Result getMoney() {
         Money money = zyjTokenMapper.getMoney();
         return Result.succ(money);
+    }
+
+    @Override
+    public Result getZyjToken(String id) {
+        ZyjToken zyjToken = null;
+        try {
+            zyjToken = zyjTokenMapper.queryToken(id);
+            return Result.succ(zyjToken);
+        }catch (Exception e){
+            log.error("查询token出现异常:"+e.toString());
+            return Result.fail("查询token出现异常:"+e.toString());
+        }
     }
 }

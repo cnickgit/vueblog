@@ -41,6 +41,10 @@ public class ZyjToken implements Serializable {
      * prescription
      */
     private Integer prescription;
+    /**
+     * 剩余次数
+     */
+    private Integer remainingTimes;
 
     /**
      * 是否启用

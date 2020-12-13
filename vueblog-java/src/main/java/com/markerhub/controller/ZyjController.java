@@ -84,19 +84,24 @@ public class ZyjController {
 
 
     @GetMapping(value = "/myRecord")
-    public Result getMyRecord(){
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://139.159.141.200/app/superscanPH/opQuery.jsp";
-        HttpHeaders headers = new HttpHeaders();
-        List<String> cookies =new ArrayList<String>();
-        /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
-        cookies.add("UM_distinctid=1757d88999410f-02e5f5298d538d-c781f38-100200-1757d889995401; CNZZDATA4962612=cnzz_eid%3D1937187844-1606304311-http%253A%252F%252F139.159.141.200%252F%26ntime%3D1606304311; CNZZDATA1276815554=1646318526-1606304320-http%253A%252F%252F139.159.141.200%252F%7C1606304320; JSESSIONID=5E5F639D84A04222075D74BFCD4C9019; CNZZDATA1277894835=1541360565-1604126342-http%253A%252F%252F139.159.141.200%252F%7C1606476364");       //在 header 中存入cookies
-        headers.put(HttpHeaders.COOKIE,cookies);
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("m", "mine");
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
-        return Result.succ(response.getBody());
+    public Result getMyRecord(@RequestParam("id") String id){
+//        RestTemplate restTemplate = new RestTemplate();
+//        String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
+//        HttpHeaders headers = new HttpHeaders();
+//        List<String> cookies =new ArrayList<String>();
+//        /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
+//        //在 header 中存入cookies
+//        cookies.add(cookie);
+//        headers.put(HttpHeaders.COOKIE,cookies);
+//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+//        map.add("m", "mine");
+//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+//        ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
+//        Object parse = JSONObject.parse(response.getBody());
+        if(StringUtils.isEmpty(id)){
+            return Result.fail("Id为空");
+        }
+        return zyjService.getZyjToken(id);
     }
 }

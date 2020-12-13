@@ -19,4 +19,6 @@ public interface ZyjTokenMapper extends BaseMapper<ZyjToken> {
     Integer insertBatch(@Param("tokens") List<ZyjToken> zyjTokens);
 
     Money getMoney();
+
+
 }

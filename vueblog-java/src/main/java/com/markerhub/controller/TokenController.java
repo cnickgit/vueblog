@@ -36,22 +36,27 @@ public class TokenController {
             zyjToken.setEnable("0");
             if(PcConstant.TYPE_ONE.equals(type)){
                 zyjToken.setPrescription(5);
+                zyjToken.setRemainingTimes(5);
                 zyjToken.setMoney(1);
                 zyjToken.setTypeRemarks("1元 5次 24小时有效");
             }else if(PcConstant.TYPE_THREE.equals(type)){
                 zyjToken.setPrescription(30);
+                zyjToken.setRemainingTimes(30);
                 zyjToken.setMoney(3);
                 zyjToken.setTypeRemarks("3元 30次 24小时有效");
             }else if(PcConstant.TYPE_FIVE.equals(type)){
                 zyjToken.setPrescription(60);
+                zyjToken.setRemainingTimes(60);
                 zyjToken.setMoney(5);
                 zyjToken.setTypeRemarks("5元 60次 24小时有效");
             }else if(PcConstant.TYPE_EVENGHT.equals(type)){
                 zyjToken.setPrescription(50);
+                zyjToken.setRemainingTimes(50);
                 zyjToken.setMoney(8);
                 zyjToken.setTypeRemarks("8元 50次 不限制时间");
             }else if(PcConstant.TYPE_TYEFIVE.equals(type)){
                 zyjToken.setPrescription(200);
+                zyjToken.setRemainingTimes(200);
                 zyjToken.setMoney(25);
                 zyjToken.setTypeRemarks("25元 200次 不限制时间");
             }
@@ -72,11 +77,8 @@ public class TokenController {
         if(null == zyjToken){
             return Result.fail("激活码无效");
         }
-        if(PcConstant.ENABLE_YES.equals(zyjToken.getEnable())){
-            return Result.succ("激活码有效");
-        }
         if(PcConstant.ENABLE_EXPIRE.equals(zyjToken.getEnable())){
-            return Result.succ("激活码已过期");
+            return Result.fail("激活码已过期");
         }
         if(PcConstant.ENABLE_NO.equals(zyjToken.getEnable())){
             if(PcConstant.TYPE_ONE.equals(zyjToken.getType())){

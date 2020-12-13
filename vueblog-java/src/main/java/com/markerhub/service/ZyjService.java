@@ -12,4 +12,6 @@ public interface ZyjService extends IService<ZyjToken> {
 
     Result getMoney();
 
+    Result getZyjToken(String id);
+
 }
