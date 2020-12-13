@@ -162,7 +162,6 @@
        },
        methods: {
            searchMark(){
-             debugger
              this.$axios.get("/searchMarking?searchName="+this.mark+"&code="+this.token+"&id="+this.cookie).then(res => {
                console.log("res:",res)
                if(res && res.data.code === 200){

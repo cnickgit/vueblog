@@ -46,6 +46,7 @@
                 })
             },
             login(){
+                sessionStorage.setItem("code",this.token)
                 this.enableToken();
             },
             enableToken(){
@@ -54,6 +55,8 @@
                     if(res.data.code == 200){
                         this.getCookie();
                         // this.$router.push({ name: 'HomePage',query: {code: this.token}})
+                    }else if(res.data.code == 400){
+                        Toast.fail(res.data.msg);
                     }
                 })
             }

@@ -33,7 +33,7 @@
                 active: 0,
                 tabbars: [
                     {
-                        name: "/HomePage",
+                        name: "HomePage",
                         title: "首页",
                         normal: require('@/assets/home_ico_active.png'),
                         active: 0
@@ -57,7 +57,7 @@
                     //     active: 3
                     // },
                     {
-                        name: "/My",
+                        name: "My",
                         title: "我的",
                         normal: require('@/assets/my_ico.png'),
                         active: 4
@@ -67,15 +67,14 @@
         },
         methods: {
             tab(index, val) {
-                this.$router.push('/HomePage')
-                // if(val == '/HomePage'){
-                //     this.$router.push('/HomePage')
+                // this.$router.push('/HomePage')
+                // if(val == 'HomePage'){
+                //     this.$router.push({name : val})
                 // }else{
-                //     this.$router.push('/My')
+                //     this.$router.push({name : val})
                 // }
-                // this.currIndex = index;
-                // this.$router.push(val);
-
+                this.currIndex = index;
+                this.$router.push(val);
             }
         },
         created(){
