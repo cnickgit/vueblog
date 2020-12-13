@@ -35,7 +35,7 @@
             this.getCookie();
           }else{
             Toast.fail(res.data.msg)
-            this.$router.push({ name: 'Login'})
+            this.$router.push({ name: 'UserLogin'})
           }
         })
       }
@@ -45,7 +45,7 @@
       console.log(this.$route.query.code)
       this.token = this.$route.query.code;
       if(this.token == undefined){
-        this.$router.push({ name: 'Login'})
+        this.$router.push({ name: 'UserLogin'})
       }else{
         this.enableToken();
       }

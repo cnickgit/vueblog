@@ -201,7 +201,7 @@
          this.token = this.$route.query.code;
          this.cookie = this.$route.query.cookie;
             if(this.token == undefined){
-              this.$router.push({ name: 'login'})
+              this.$router.push({ name: 'UserLogin'})
             }
        }
     }

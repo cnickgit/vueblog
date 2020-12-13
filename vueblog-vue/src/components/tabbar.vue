@@ -29,6 +29,7 @@
         },
         data(){
             return {
+                code: '',
                 currIndex: '',
                 active: 0,
                 tabbars: [
@@ -38,43 +39,20 @@
                         normal: require('@/assets/home_ico_active.png'),
                         active: 0
                     },
-                    // {
-                    //     name: "category",
-                    //     title: "打标",
-                    //     normal: require('@/assets/report_ico.png'),
-                    //     active: 1
-                    // },
-                    // {
-                    //     name: "message",
-                    //     title: "客服",
-                    //     normal: require('@/assets/teas_ico.png'),
-                    //     active: 2
-                    // },
-                    // {
-                    //     name: "cart",
-                    //     title: "打标记录",
-                    //     normal: require('@/assets/save_ico.png'),
-                    //     active: 3
-                    // },
                     {
                         name: "My",
                         title: "我的",
                         normal: require('@/assets/my_ico.png'),
-                        active: 4
+                        active: 1
                     }
                 ],
             }
         },
         methods: {
             tab(index, val) {
-                // this.$router.push('/HomePage')
-                // if(val == 'HomePage'){
-                //     this.$router.push({name : val})
-                // }else{
-                //     this.$router.push({name : val})
-                // }
+                this.code = sessionStorage.getItem("code");
                 this.currIndex = index;
-                this.$router.push(val);
+                this.$router.push({name : val,query: {code : this.code}});
             }
         },
         created(){

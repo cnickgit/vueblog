@@ -1,21 +1,29 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '../views/Login.vue'
+// import Login from '../views/Login.vue'
 import Blogs from '../views/Blogs.vue'
 import BlogEdit from '../views/BlogEdit.vue'
 import BlogDetail from '../views/BlogDetail.vue'
 import HomePage from "@/home/homePage";
 import My from "@/page/my.vue";
-import login from "@/components/Login.vue";
+import UserLogin from "@/components/Login.vue";
 
 Vue.use(VueRouter)
 
 
 const routes = [
   {
-    path: '/Login',
-    name: 'Login',
-    component: login,
+    path: '/HomePage',
+    name: 'HomePage',
+    component: HomePage,
+    meta: {
+      showTab:true
+    }
+  },
+  {
+    path: '/UserLogin',
+    name: 'UserLogin',
+    component: UserLogin,
     meta: {
           showTab:false
     }
@@ -31,14 +39,6 @@ const routes = [
   //   component: HomePage
   // },
   {
-    path: '/HomePage',
-    name: 'HomePage',
-    component: HomePage,
-    meta: {
-          showTab:true
-    }
-  },
-  {
     path: '/My',
     name: 'My',
     component: My,
@@ -51,11 +51,11 @@ const routes = [
     name: 'Blogs',
     component: Blogs
   },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login
-  },
+  // {
+  //   path: '/login',
+  //   name: 'Login',
+  //   component: Login
+  // },
   {
     path: '/blog/add',
     name: 'BlogAdd',
