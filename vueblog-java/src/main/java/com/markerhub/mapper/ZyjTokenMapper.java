@@ -12,6 +12,8 @@ public interface ZyjTokenMapper extends BaseMapper<ZyjToken> {
 
     public List<ZyjToken> queryAllTokens(@Param("enableType") String enableType);
 
+    public List<ZyjToken> queryNotEnableTokens(@Param("num") Integer num);
+
     public ZyjToken queryTokenByCode(@Param("code") String code);
 
     public ZyjToken queryToken(@Param("code") String code);
@@ -19,6 +21,8 @@ public interface ZyjTokenMapper extends BaseMapper<ZyjToken> {
     Integer insertBatch(@Param("tokens") List<ZyjToken> zyjTokens);
 
     Money getMoney();
+
+
 
 
 }

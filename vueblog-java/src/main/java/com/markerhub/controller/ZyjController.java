@@ -82,26 +82,8 @@ public class ZyjController {
         return zyjService.searchMarking(searchName,code,cookie);
     }
 
-
     @GetMapping(value = "/myRecord")
-    public Result getMyRecord(@RequestParam("id") String id){
-//        RestTemplate restTemplate = new RestTemplate();
-//        String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
-//        HttpHeaders headers = new HttpHeaders();
-//        List<String> cookies =new ArrayList<String>();
-//        /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
-//        //在 header 中存入cookies
-//        cookies.add(cookie);
-//        headers.put(HttpHeaders.COOKIE,cookies);
-//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-//        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-//        map.add("m", "mine");
-//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-//        ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
-//        Object parse = JSONObject.parse(response.getBody());
-        if(StringUtils.isEmpty(id)){
-            return Result.fail("Id为空");
-        }
-        return zyjService.getZyjToken(id);
+    public Result getMyRecord(@RequestParam("id") String cookie){
+        return zyjService.getZyjToken(cookie);
     }
 }

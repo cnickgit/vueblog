@@ -51,6 +51,11 @@ public class ZyjToken implements Serializable {
      */
     private String enable;
 
+    /**
+     * 导出状态
+     */
+    private String exportStatus;
+
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date enableTime;
 

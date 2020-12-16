@@ -1,5 +1,6 @@
 package com.markerhub.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.markerhub.common.lang.Result;
 import com.markerhub.constant.PcConstant;
 import com.markerhub.entity.ZyjToken;
@@ -7,10 +8,20 @@ import com.markerhub.mapper.ZyjTokenMapper;
 import com.markerhub.service.ZyjService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @RestController
@@ -34,6 +45,7 @@ public class TokenController {
             zyjToken.setCreateTime(new Date());
             zyjToken.setUpdateTime(new Date());
             zyjToken.setEnable("0");
+            zyjToken.setExportStatus("0");
             if(PcConstant.TYPE_ONE.equals(type)){
                 zyjToken.setPrescription(5);
                 zyjToken.setRemainingTimes(5);
@@ -72,13 +84,9 @@ public class TokenController {
 
     @GetMapping(value = "/enableToken")
     public Result enableZyjToken(@RequestParam("code") String code){
-//        ZyjToken zyjToken = zyjTokenMapper.selectById(id);
         ZyjToken zyjToken = zyjTokenMapper.queryToken(code);
         if(null == zyjToken){
             return Result.fail("激活码无效");
-        }
-        if(PcConstant.ENABLE_EXPIRE.equals(zyjToken.getEnable())){
-            return Result.fail("激活码已过期");
         }
         if(PcConstant.ENABLE_NO.equals(zyjToken.getEnable())){
             if(PcConstant.TYPE_ONE.equals(zyjToken.getType())){
@@ -132,8 +140,18 @@ public class TokenController {
 
     }
 
+    @GetMapping(value="/exportExcelAll")
+    public void exportExcel(HttpServletRequest request, HttpServletResponse response,@RequestParam("num") Integer num) {
+        zyjService.exportAllExcel(request,response,num);
+    }
+
     @GetMapping(value="/money")
     public Result getCurrentMonthMony(){
         return zyjService.getMoney();
+    }
+
+    @GetMapping(value = "zyjMy")
+    public Result getZyjMy(){
+        return zyjService.getZyjMy();
     }
 }
