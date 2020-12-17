@@ -36,8 +36,8 @@
         select * from zyj_token where enable = #{enableType} order by create_time desc
     </select>
 
-    <select id="queryNotEnableTokens" resultType="com.markerhub.entity.ZyjToken">
-        select * from zyj_token where enable = '1' limit #{num}
+    <select id="queryNotEnableTokens" resultType="com.markerhub.entity.TokenExcel">
+        select code as code,money as money,prescription as prescription,type_remarks as typeRemarks from zyj_token where enable = '0' limit #{num}
     </select>
 
     <select id="queryToken" resultType="com.markerhub.entity.ZyjToken">

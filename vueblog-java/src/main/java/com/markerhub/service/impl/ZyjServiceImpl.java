@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.markerhub.common.lang.Result;
 import com.markerhub.entity.Money;
+import com.markerhub.entity.TokenExcel;
 import com.markerhub.entity.ZyjToken;
 import com.markerhub.entity.ZyjUser;
 import com.markerhub.mapper.ZyjTokenMapper;
 import com.markerhub.mapper.ZyjUserMapper;
 import com.markerhub.service.ZyjService;
 import com.markerhub.service.ZyjUserService;
+import com.markerhub.util.FileDownloadUtil;
 import com.markerhub.vo.TokenDto;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -171,44 +173,18 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
     }
 
     @Override
-    public void exportAllExcel(HttpServletRequest request, HttpServletResponse response,Integer num) {
+    public Result exportAllExcel(HttpServletRequest request, HttpServletResponse response,Integer num) {
         try {
             //查询
-            List<ZyjToken> zyjTokens = zyjTokenMapper.queryNotEnableTokens(num);
-            HSSFWorkbook wb = new HSSFWorkbook();
-            HSSFSheet sheet = wb.createSheet("记录");
-            HSSFRow row = null;
-            int columnIndex = 0;
-            row = sheet.createRow(0);
-            row.setHeight((short) (22.50 * 20));//设置行高
-            row.createCell(columnIndex).setCellValue("激活码");
-            row.createCell(columnIndex).setCellValue("金钱");
-            row.createCell(columnIndex).setCellValue("次数");
-            row.createCell(columnIndex).setCellValue("说明");
-            for(int i=0;i<zyjTokens.size();i++){
-                row = sheet.createRow(i + 1);
-                ZyjToken zyjToken = zyjTokens.get(i);
-                row.createCell(columnIndex).setCellValue(zyjToken.getCode());
-                row.createCell(++columnIndex).setCellValue(zyjToken.getMoney());
-                row.createCell(++columnIndex).setCellValue(zyjToken.getPrescription());
-                row.createCell(++columnIndex).setCellValue(zyjToken.getTypeRemarks());
-
+            List<TokenExcel> zyjTokens = zyjTokenMapper.queryNotEnableTokens(num);
+            for(TokenExcel token : zyjTokens){
+                String prifx = "http://182.92.126.206:8082/";
+                token.setCode(prifx+token.getCode());
             }
-            sheet.setDefaultRowHeight((short) (16.5 * 20));
-            //列宽自适应
-            for (int i = 0; i <= 11; i++) {
-                sheet.autoSizeColumn(i);
-            }
-            String title= "激活码";
-
-            response.setHeader("Content-disposition", "attachment;fileName=" + title + ".xls");
-            response.setContentType("application/octet-stream;charset=utf-8");
-            OutputStream ouputStream = response.getOutputStream();
-            wb.write(ouputStream);
-            ouputStream.flush();
-            ouputStream.close();
+            return Result.succ(FileDownloadUtil.export(response, zyjTokens,TokenExcel.class));
         }catch (Exception e){
             log.error("导出数据出现异常，异常原因:"+e.toString());
+            return Result.fail("导出数据出现异常，异常原因:"+e.toString());
         }
 
     }

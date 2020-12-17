@@ -2,6 +2,7 @@ package com.markerhub.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.markerhub.entity.Money;
+import com.markerhub.entity.TokenExcel;
 import com.markerhub.entity.ZyjToken;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,7 +13,7 @@ public interface ZyjTokenMapper extends BaseMapper<ZyjToken> {
 
     public List<ZyjToken> queryAllTokens(@Param("enableType") String enableType);
 
-    public List<ZyjToken> queryNotEnableTokens(@Param("num") Integer num);
+    public List<TokenExcel> queryNotEnableTokens(@Param("num") Integer num);
 
     public ZyjToken queryTokenByCode(@Param("code") String code);
 

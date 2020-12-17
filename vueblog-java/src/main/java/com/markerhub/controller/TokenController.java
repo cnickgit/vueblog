@@ -141,8 +141,8 @@ public class TokenController {
     }
 
     @GetMapping(value="/exportExcelAll")
-    public void exportExcel(HttpServletRequest request, HttpServletResponse response,@RequestParam("num") Integer num) {
-        zyjService.exportAllExcel(request,response,num);
+    public Result exportExcel(HttpServletRequest request, HttpServletResponse response,@RequestParam("num") Integer num) {
+        return zyjService.exportAllExcel(request,response,num);
     }
 
     @GetMapping(value="/money")
