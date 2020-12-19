@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface ZyjService extends IService<ZyjToken> {
 
-    Result searchZyj(String searchName,String code,String cookie);
+    Result searchZyj(String searchName,String code);
 
-    Result searchMarking(String searchName,String code,String cookie);
+    Result searchMarking(String searchName,String code);
 
     Result getMoney();
 

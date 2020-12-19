@@ -4,11 +4,15 @@
     <resultMap id="BaseResultMap" type="com.markerhub.entity.ZyjUser">
         <id column="id" property="id" />
         <result column="account" property="account" />
+        <result column="cookie" property="cookie" />
         <result column="password" property="password" />
         <result column="move" property="move" />
+        <result column="leave_num" property="leaveNum" />
+        <result column="expire" property="expire"/>
+        <result column="order_type" property="orderType" />
     </resultMap>
 
     <select id="queryZyjUsers" resultType="com.markerhub.entity.ZyjUser">
-        select * from zyj_user
+       select * from zyj_user order by order_type desc
     </select>
 </mapper>

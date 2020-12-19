@@ -3,6 +3,7 @@ package com.markerhub.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.markerhub.common.lang.Result;
+import com.markerhub.constant.PcConstant;
 import com.markerhub.entity.Money;
 import com.markerhub.entity.TokenExcel;
 import com.markerhub.entity.ZyjToken;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,58 +47,203 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
     @Autowired
     private ZyjUserMapper zyjUserMapper;
 
+    public void setCookies(ZyjUser user){
+        //cookies为空或者已过期
+        if(StringUtils.isEmpty(user.getCookie()) || user.getExpire().equals("1")){
+            RestTemplate restTemplate = new RestTemplate();
+            String url = "http://106.12.189.59/app/superscanPH/loginPH.jsp";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+            map.add("m", "login");
+            map.add("username", user.getAccount());
+            map.add("password", user.getPassword());
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+            ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
+            String s = response.getHeaders().get("Set-Cookie").get(0);
+            user.setCookie(s.split(";")[0]+";");
+            user.setExpire("0");
+            zyjUserMapper.updateById(user);
+        }
+    }
+
+    public void setQuerySequence(ZyjUser user){
+            //获取查询次数
+            RestTemplate restTemplate = new RestTemplate();
+            String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
+            HttpHeaders headers = new HttpHeaders();
+            List<String> cookies =new ArrayList<String>();
+            /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
+            //在 header 中存入cookies
+            cookies.add(user.getCookie());
+            headers.put(HttpHeaders.COOKIE,cookies);
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+            map.add("m", "mine");
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+            ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
+            System.out.println("saaaa:"+response.getBody());
+            JSONObject jsonObject = JSONObject.parseObject(response.getBody());
+            if("ns".equals(jsonObject.get("result"))){
+                //cookies过期
+                this.setCookies(user);
+                cookies.add(user.getCookie());
+                headers.put(HttpHeaders.COOKIE,cookies);
+                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                map.add("m", "mine");
+                response = restTemplate.postForEntity( url, request , String.class );
+                jsonObject = JSONObject.parseObject(response.getBody());
+                String sycs = (String) jsonObject.get("qinf");
+                String leaveNum = sycs.split("/")[1];
+                user.setLeaveNum(leaveNum);
+                zyjUserMapper.updateById(user);
+                if(PcConstant.LAVE_500.equals(leaveNum)){
+                    user.setOrderType("1");
+                }else if(PcConstant.LAVE_100.equals(leaveNum)){
+                    user.setOrderType("2");
+                }else if(PcConstant.LAVE_80.equals(leaveNum)){
+                    user.setOrderType("3");
+                }else if(PcConstant.LAVE_1.equals(leaveNum)){
+                    user.setOrderType("4");
+                }
+            }else{
+                String sycs = (String) jsonObject.get("qinf");
+                String leaveNum = sycs.split("/")[1];
+                user.setLeaveNum(leaveNum);
+                zyjUserMapper.updateById(user);
+                if(PcConstant.LAVE_500.equals(leaveNum)){
+                    user.setOrderType("1");
+                }else if(PcConstant.LAVE_100.equals(leaveNum)){
+                    user.setOrderType("2");
+                }else if(PcConstant.LAVE_80.equals(leaveNum)){
+                    user.setOrderType("3");
+                }else if(PcConstant.LAVE_1.equals(leaveNum)){
+                    user.setOrderType("4");
+                }
+            }
+    }
+
     @Override
-    public Result searchZyj(String searchName, String code, String cookie) {
+    public Result searchZyj(String searchName, String code) {
         ZyjToken token = zyjTokenMapper.queryTokenByCode(code);
         if(token == null || token.getRemainingTimes() < 1){
             return Result.fail("激活码失效");
         }
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
-        HttpHeaders headers = new HttpHeaders();
-        List<String> cookies =new ArrayList<String>();
+       //调用登录接口获取cookie查询次数
+        List<ZyjUser> zyjUsers = zyjUserMapper.queryZyjUsers();
+        for(ZyjUser user : zyjUsers){
+            this.setCookies(user);
+        }
+//        this.setQuerySequence(zyjUsers);
+        //查询
+        JSONObject jsonObject = null;
+
+
         /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
         //在 header 中存入cookies
-        cookies.add(cookie);
-        headers.put(HttpHeaders.COOKIE,cookies);
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("m", "queryAliim");
-        map.add("aliim", searchName);
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
-        token.setRemainingTimes(token.getPrescription() -1);
-        zyjTokenMapper.updateById(token);
-        System.out.println("body:"+response.getBody());
-        Object parse = JSONObject.parse(response.getBody());
-        return Result.succ(parse);
+        for(ZyjUser user : zyjUsers){
+            RestTemplate restTemplate = new RestTemplate();
+            String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
+            HttpHeaders headers = new HttpHeaders();
+            List<String> cookies =new ArrayList<String>();
+            MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+            cookies.add(user.getCookie());
+            headers.put(HttpHeaders.COOKIE,cookies);
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            map.add("m", "queryAliim");
+            map.add("aliim", searchName);
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+            ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
+            jsonObject = JSONObject.parseObject(response.getBody());
+            String result = jsonObject.get("result").toString();
+            if("ns".equals(result)){
+                //cookies过期
+                user.setExpire("1");
+                this.setCookies(user);
+                /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
+                //在 header 中存入cookies
+                cookies.add(user.getCookie());
+                headers.put(HttpHeaders.COOKIE,cookies);
+                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                map.add("m", "queryAliim");
+                map.add("aliim", searchName);
+                request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+                response = restTemplate.postForEntity( url, request , String.class );
+                jsonObject = JSONObject.parseObject(response.getBody());
+                //需要验证码
+                if("y".equals(jsonObject.get("iff"))){
+                    continue;
+                }
+            }else if("账号不存在".equals(result)){
+                break;
+            }else {
+                token.setRemainingTimes(token.getRemainingTimes() -1);
+                zyjTokenMapper.updateById(token);
+                this.setQuerySequence(user);
+                zyjUserMapper.updateById(user);
+                break;
+            }
+        }
+        return Result.succ(jsonObject);
     }
 
     @Override
-    public Result searchMarking(String searchName, String code, String cookie) {
+    public Result searchMarking(String searchName, String code) {
         ZyjToken token = zyjTokenMapper.queryTokenByCode(code);
         if(token == null || token.getPrescription() < 1){
             return Result.fail("激活码失效");
         }
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
-        HttpHeaders headers = new HttpHeaders();
-        List<String> cookies =new ArrayList<String>();
-        /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
-        //在 header 中存入cookies
-        cookies.add(cookie);
-        headers.put(HttpHeaders.COOKIE,cookies);
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("m", "getQWRs");
-        map.add("wxorqq", searchName);
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
-        token.setPrescription(token.getPrescription() -1);
-        zyjTokenMapper.updateById(token);
-        System.out.println("body:"+response.getBody());
-        Object parse = JSONObject.parse(response.getBody());
-        return Result.succ(parse);
+        //调用登录接口获取cookie查询次数
+        List<ZyjUser> zyjUsers = zyjUserMapper.queryZyjUsers();
+        this.setCookie(zyjUsers);
+        JSONObject jsonObject = null;
+
+
+        for(ZyjUser user : zyjUsers){
+            RestTemplate restTemplate = new RestTemplate();
+            String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
+            HttpHeaders headers = new HttpHeaders();
+            MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+            List<String> cookies =new ArrayList<String>();
+            /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
+            //在 header 中存入cookies
+            cookies.add(user.getCookie());
+            headers.put(HttpHeaders.COOKIE,cookies);
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            map.add("m", "getQWRs");
+            map.add("wxorqq", searchName);
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+            ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
+            System.out.println("body:"+response.getBody());
+            jsonObject = JSONObject.parseObject(response.getBody());
+            String result = jsonObject.get("result").toString();
+            if("ns".equals(result)){
+                //token过期
+                //cookies过期
+                user.setExpire("1");
+                this.setCookies(user);
+                cookies.add(user.getCookie());
+                headers.put(HttpHeaders.COOKIE,cookies);
+                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                map.add("m", "getQWRs");
+                map.add("wxorqq", searchName);
+                System.out.println("body:"+response.getBody());
+                jsonObject = JSONObject.parseObject(response.getBody());
+                //需要验证码
+                if("y".equals(jsonObject.get("iff"))){
+                    continue;
+                }
+            }else if("账号不存在".equals(result)){
+                break;
+            }else{
+                token.setRemainingTimes(token.getRemainingTimes() -1);
+                zyjTokenMapper.updateById(token);
+                this.setQuerySequence(user);
+                zyjUserMapper.updateById(user);
+                break;
+            }
+        }
+        return Result.succ(jsonObject);
     }
 
     @Override

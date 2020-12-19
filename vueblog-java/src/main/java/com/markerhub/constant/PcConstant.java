@@ -46,4 +46,13 @@ public class  PcConstant {
      * 已过期
      */
     public final static String ENABLE_EXPIRE = "2";
+
+
+    public final static String LAVE_500 = "剩余500次";
+
+    public final static String LAVE_100 = "剩余100次";
+
+    public final static String LAVE_80 = "剩余80次";
+
+    public final static String LAVE_1 = "剩余1次";
 }

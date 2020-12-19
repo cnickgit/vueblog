@@ -26,6 +26,8 @@ public class ZyjUserServiceImpl extends ServiceImpl<ZyjUserMapper, ZyjUser> impl
         user.setAccount(zyjUser.getAccount());
         user.setPassword(zyjUser.getPassword());
         user.setCookie("");
+        user.setOrderType("");
+        user.setExpire("0");
         try{
             int i = zyjUserMapper.insert(user);
             if(i>0){

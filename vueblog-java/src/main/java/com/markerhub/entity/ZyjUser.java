@@ -19,4 +19,10 @@ public class ZyjUser implements Serializable {
     private String password;
 
     private String move;
+
+    private String expire;
+
+    private String leaveNum;
+
+    private String orderType;
 }
