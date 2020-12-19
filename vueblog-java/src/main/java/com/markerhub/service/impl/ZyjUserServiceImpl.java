@@ -22,11 +22,9 @@ public class ZyjUserServiceImpl extends ServiceImpl<ZyjUserMapper, ZyjUser> impl
     public Result addZyjUser(ZyjUser zyjUser) {
         ZyjUser user = new ZyjUser();
         user.setId(UUIDUtil.getUUID());
-        user.setMove("1");
         user.setAccount(zyjUser.getAccount());
         user.setPassword(zyjUser.getPassword());
         user.setCookie("");
-        user.setOrderType("");
         user.setExpire("0");
         try{
             int i = zyjUserMapper.insert(user);

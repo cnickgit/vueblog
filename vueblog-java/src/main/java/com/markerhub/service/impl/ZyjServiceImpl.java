@@ -96,30 +96,10 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
                 String sycs = (String) jsonObject.get("qinf");
                 String leaveNum = sycs.split("/")[1];
                 user.setLeaveNum(leaveNum);
-                zyjUserMapper.updateById(user);
-                if(PcConstant.LAVE_500.equals(leaveNum)){
-                    user.setOrderType("1");
-                }else if(PcConstant.LAVE_100.equals(leaveNum)){
-                    user.setOrderType("2");
-                }else if(PcConstant.LAVE_80.equals(leaveNum)){
-                    user.setOrderType("3");
-                }else if(PcConstant.LAVE_1.equals(leaveNum)){
-                    user.setOrderType("4");
-                }
             }else{
                 String sycs = (String) jsonObject.get("qinf");
                 String leaveNum = sycs.split("/")[1];
                 user.setLeaveNum(leaveNum);
-                zyjUserMapper.updateById(user);
-                if(PcConstant.LAVE_500.equals(leaveNum)){
-                    user.setOrderType("1");
-                }else if(PcConstant.LAVE_100.equals(leaveNum)){
-                    user.setOrderType("2");
-                }else if(PcConstant.LAVE_80.equals(leaveNum)){
-                    user.setOrderType("3");
-                }else if(PcConstant.LAVE_1.equals(leaveNum)){
-                    user.setOrderType("4");
-                }
             }
     }
 
@@ -134,11 +114,8 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
         for(ZyjUser user : zyjUsers){
             this.setCookies(user);
         }
-//        this.setQuerySequence(zyjUsers);
         //查询
         JSONObject jsonObject = null;
-
-
         /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
         //在 header 中存入cookies
         for(ZyjUser user : zyjUsers){
