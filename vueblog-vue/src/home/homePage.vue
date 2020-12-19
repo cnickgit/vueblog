@@ -162,7 +162,7 @@
        },
        methods: {
            searchMark(){
-             this.$axios.get("/searchMarking?searchName="+this.mark+"&code="+this.token+"&id="+this.cookie).then(res => {
+             this.$axios.get("/searchMarking?searchName="+this.mark+"&code="+this.token).then(res => {
                console.log("res:",res)
                if(res && res.data.code === 200){
                  this.markObj = res.data.data;
@@ -179,27 +179,22 @@
              })
            },
            search(){
-             this.$axios.get("/search?searchName="+this.searchName+"&code="+this.token+"&id="+this.cookie).then(res => {
+             this.$axios.get("/search?searchName="+this.searchName+"&code="+this.token).then(res => {
                this.showDefault = false;
                this.showResult = true;
                console.log("res:",res)
-                 if(res.data.data == '账号不存在'){
+                 if(res.data.data.result != null && res.data.data.result == '账号不存在'){
+                   this.showDefault = true;
+                   this.showResult = false;
                    Toast.fail("账号不存在")
                  }else{
                    this.data = res.data.data;
                  }
              })
-           },
-           login(){
-             const _this = this
-             _this.$axios.get("/zyjLogin").then(res => {
-               console.log(res)
-             })
            }
        },
        created() {
          this.token = this.$route.query.code;
-         this.cookie = this.$route.query.cookie;
             if(this.token == undefined){
               this.$router.push({ name: 'UserLogin'})
             }

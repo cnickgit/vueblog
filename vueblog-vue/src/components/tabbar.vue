@@ -50,6 +50,7 @@
         },
         methods: {
             tab(index, val) {
+                console.log("val:",val)
                 this.code = sessionStorage.getItem("code");
                 this.currIndex = index;
                 this.$router.push({name : val,query: {code : this.code}});

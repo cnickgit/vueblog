@@ -38,23 +38,20 @@
                 this.$axios.get("/zyjLogin").then(res => {
                     console.log("res:",res)
                     if(res != null){
-                        this.cookie = res.data.data;
-                        this.$router.push({ name: 'HomePage',query: {code: this.token,cookie: this.cookie}})
+                        this.$router.push({ name: 'HomePage',query: {code: this.token}})
                     }else{
                         Toast.fail("激活码失效请联系客服")
                     }
                 })
             },
             login(){
-                sessionStorage.setItem("code",this.token)
                 this.enableToken();
             },
             enableToken(){
                 this.$axios.get('/enableToken?code='+this.token).then((res) => {
                     console.log("data:",res.data.data)
                     if(res.data.code == 200){
-                        this.getCookie();
-                        // this.$router.push({ name: 'HomePage',query: {code: this.token}})
+                        this.$router.push({ name: 'HomePage',query: {code: this.token}})
                     }else if(res.data.code == 400){
                         Toast.fail(res.data.msg);
                     }
