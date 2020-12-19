@@ -32,7 +32,7 @@
       enableToken(){
         this.$axios.get('/enableToken?code='+this.token).then((res) => {
           if(res.data.code == 200){
-            this.getCookie();
+            this.$router.push({ name: 'HomePage',query: {code: this.token}})
           }else{
             Toast.fail(res.data.msg)
             this.$router.push({ name: 'UserLogin'})
@@ -42,7 +42,6 @@
     },
     created() {
       sessionStorage.setItem("code",this.$route.query.code);
-      console.log(this.$route.query.code)
       this.token = this.$route.query.code;
       if(this.token == undefined){
         this.$router.push({ name: 'UserLogin'})

@@ -195,6 +195,7 @@
        },
        created() {
          this.token = this.$route.query.code;
+         sessionStorage.setItem("code",this.token)
             if(this.token == undefined){
               this.$router.push({ name: 'UserLogin'})
             }
