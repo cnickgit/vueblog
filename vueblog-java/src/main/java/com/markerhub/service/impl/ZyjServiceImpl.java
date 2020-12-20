@@ -82,7 +82,6 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
             map.add("m", "mine");
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
             ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
-            System.out.println("saaaa:"+response.getBody());
             JSONObject jsonObject = JSONObject.parseObject(response.getBody());
             if("ns".equals(jsonObject.get("result"))){
                 //cookies过期
@@ -103,6 +102,63 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
             }
     }
 
+    public boolean isNext(ZyjUser user){
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
+        HttpHeaders headers = new HttpHeaders();
+        List<String> cookies =new ArrayList<String>();
+        /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
+        //在 header 中存入cookies
+        cookies.add(user.getCookie());
+        headers.put(HttpHeaders.COOKIE,cookies);
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        map.add("m", "mine");
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
+        JSONObject jsonObject = JSONObject.parseObject(response.getBody());
+        if("ns".equals(jsonObject.get("result"))){
+            //cookies过期
+            cookies.clear();
+            user.setExpire("1");
+            this.setCookies(user);
+            cookies.add(user.getCookie());
+            headers.put(HttpHeaders.COOKIE,cookies);
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            map.add("m", "mine");
+            response = restTemplate.postForEntity( url, request , String.class );
+            jsonObject = JSONObject.parseObject(response.getBody());
+            String sycs = (String) jsonObject.get("qinf");
+            String leaveNum = sycs.split("/")[1];
+            String substring = leaveNum.substring(2);
+            String day = substring.substring(0, substring.indexOf("天"));
+            int num = Integer.parseInt(day);
+            user.setLeaveNum(leaveNum);
+            if(user.getMaxTimes() < num){
+                user.setUseStatus("使用中");
+                return true;
+            }else{
+                user.setUseStatus("停用");
+                return false;
+            }
+        }else{
+            String sycs = (String) jsonObject.get("qinf");
+            String leaveNum = sycs.split("/")[1];
+            user.setLeaveNum(leaveNum);
+            String substring = leaveNum.substring(2);
+            String day = substring.substring(0, substring.indexOf("次"));
+            int num = Integer.parseInt(day);
+            user.setLeaveNum(leaveNum);
+            if(user.getMaxTimes() < num){
+                user.setUseStatus("使用中");
+                return true;
+            }else{
+                user.setUseStatus("停用");
+                return false;
+            }
+        }
+    }
+
     @Override
     public Result searchZyj(String searchName, String code) {
         ZyjToken token = zyjTokenMapper.queryTokenByCode(code);
@@ -111,14 +167,12 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
         }
        //调用登录接口获取cookie查询次数
         List<ZyjUser> zyjUsers = zyjUserMapper.queryZyjUsers();
-        for(ZyjUser user : zyjUsers){
-            this.setCookies(user);
-        }
         //查询
         JSONObject jsonObject = null;
-        /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
-        //在 header 中存入cookies
         for(ZyjUser user : zyjUsers){
+            if(!this.isNext(user)){
+                continue;
+            }
             RestTemplate restTemplate = new RestTemplate();
             String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
             HttpHeaders headers = new HttpHeaders();
@@ -172,11 +226,11 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
         }
         //调用登录接口获取cookie查询次数
         List<ZyjUser> zyjUsers = zyjUserMapper.queryZyjUsers();
-        this.setCookie(zyjUsers);
         JSONObject jsonObject = null;
-
-
         for(ZyjUser user : zyjUsers){
+            if(!this.isNext(user)){
+                continue;
+            }
             RestTemplate restTemplate = new RestTemplate();
             String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
             HttpHeaders headers = new HttpHeaders();
@@ -191,12 +245,12 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
             map.add("wxorqq", searchName);
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
             ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
-            System.out.println("body:"+response.getBody());
             jsonObject = JSONObject.parseObject(response.getBody());
             String result = jsonObject.get("result").toString();
             if("ns".equals(result)){
                 //token过期
                 //cookies过期
+                cookies.clear();
                 user.setExpire("1");
                 this.setCookies(user);
                 cookies.add(user.getCookie());
@@ -204,13 +258,12 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
                 headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
                 map.add("m", "getQWRs");
                 map.add("wxorqq", searchName);
-                System.out.println("body:"+response.getBody());
                 jsonObject = JSONObject.parseObject(response.getBody());
                 //需要验证码
                 if("y".equals(jsonObject.get("iff"))){
                     continue;
                 }
-            }else if("账号不存在".equals(result)){
+            }else if("wxnodata".equals(result)){
                 break;
             }else{
                 token.setRemainingTimes(token.getRemainingTimes() -1);

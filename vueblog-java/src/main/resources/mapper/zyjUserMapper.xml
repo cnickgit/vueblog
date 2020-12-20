@@ -10,9 +10,10 @@
         <result column="expire" property="expire"/>
         <result column="serial_num" property="serialNum" />
         <result column="max_times" property="maxTimes"/>
+        <result column="use_status" property="useStatus"/>
     </resultMap>
 
     <select id="queryZyjUsers" resultType="com.markerhub.entity.ZyjUser">
-       select * from zyj_user order by serial_num desc
+       select * from zyj_user order by serial_num asc
     </select>
 </mapper>

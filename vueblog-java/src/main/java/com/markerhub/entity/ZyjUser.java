@@ -26,4 +26,6 @@ public class ZyjUser implements Serializable {
 
     private Integer maxTimes;
 
+    private String useStatus;
+
 }
