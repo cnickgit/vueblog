@@ -180,14 +180,17 @@
            },
            search(){
              this.$axios.get("/search?searchName="+this.searchName+"&code="+this.token).then(res => {
-               this.showDefault = false;
-               this.showResult = true;
-               console.log("res:",res)
-                 if(res.data.data.result != null && res.data.data.result == '账号不存在'){
+                  if(res.data.data == null){
+                    this.showDefault = true;
+                    this.showResult = false;
+                    Toast.fail(res.data.msg);
+                  }else if(res.data.data.result != null && res.data.data.result == '账号不存在'){
                    this.showDefault = true;
                    this.showResult = false;
                    Toast.fail("账号不存在")
                  }else{
+                    this.showDefault = false;
+                    this.showResult = true;
                    this.data = res.data.data;
                  }
              })

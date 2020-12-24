@@ -1,6 +1,6 @@
 <template>
     <div>
-        <van-tabbar v-model="active">
+        <van-tabbar v-model="active" style=" margin-top:20px;height: 50px">
             <van-tabbar-item
                     v-for="(item,index) in tabbars"
                     :key="index"
