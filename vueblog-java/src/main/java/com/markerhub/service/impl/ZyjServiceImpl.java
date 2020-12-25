@@ -131,7 +131,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
             String sycs = (String) jsonObject.get("qinf");
             String leaveNum = sycs.split("/")[1];
             String substring = leaveNum.substring(2);
-            String day = substring.substring(0, substring.indexOf("天"));
+            String day = substring.substring(0, substring.indexOf("次"));
             int num = Integer.parseInt(day);
             user.setLeaveNum(leaveNum);
             if(user.getMaxTimes() < num){
@@ -139,6 +139,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
                 return true;
             }else{
                 user.setUseStatus("停用");
+                zyjUserMapper.updateById(user);
                 return false;
             }
         }else{
@@ -154,6 +155,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
                 return true;
             }else{
                 user.setUseStatus("停用");
+                zyjUserMapper.updateById(user);
                 return false;
             }
         }
@@ -162,8 +164,14 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
     @Override
     public Result searchZyj(String searchName, String code) {
         ZyjToken token = zyjTokenMapper.queryTokenByCode(code);
-        if(token == null || token.getRemainingTimes() < 1){
+        if(token == null){
             return Result.fail("激活码失效");
+        }
+        if(token.getRemainingTimes() < 1){
+            return Result.fail("对不起，您的查询次数已用完");
+        }
+        if("2".equals(token.getEnable())){
+            return Result.fail("对不起，您的激活码已到期");
         }
        //调用登录接口获取cookie查询次数
         List<ZyjUser> zyjUsers = zyjUserMapper.queryZyjUsers();

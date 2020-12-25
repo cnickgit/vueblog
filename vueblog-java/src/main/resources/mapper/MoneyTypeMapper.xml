@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markerhub.mapper.MoneyTypeMapper">
+
+    <resultMap id="BaseResultMap" type="com.markerhub.entity.MoneyType">
+        <id column="id" property="id" />
+        <result column="money" property="money" />
+        <result column="time_type" property="timeType" />
+        <result column="query_num" property="queryNum" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <select id="getMoneyType" resultType="com.markerhub.entity.MoneyType">
+      select * from moneyType order by update_time desc
+    </select>
+
+</mapper>

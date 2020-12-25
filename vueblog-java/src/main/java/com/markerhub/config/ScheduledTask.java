@@ -28,11 +28,13 @@ public class ScheduledTask {
         Calendar cal = Calendar.getInstance();
         for(ZyjToken token : zyjTokens){
             System.out.println("time:"+token.getEndTime());
-            if(cal.getTime().compareTo(token.getEndTime()) > 0 || token.getRemainingTimes() < 1){
-                System.out.println("token过期了");
-                //已过期
-                token.setEnable("2");
-                zyjTokenMapper.updateById(token);
+            if(null != token.getEndTime()){
+                if(cal.getTime().compareTo(token.getEndTime()) > 0 || token.getRemainingTimes() < 1){
+                    System.out.println("token过期了");
+                    //已过期
+                    token.setEnable("2");
+                    zyjTokenMapper.updateById(token);
+                }
             }
         }
         System.out.print("执行一次\n");
