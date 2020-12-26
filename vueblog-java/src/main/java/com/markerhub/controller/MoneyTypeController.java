@@ -4,10 +4,7 @@ import com.markerhub.common.lang.Result;
 import com.markerhub.service.MoneyTypeService;
 import com.markerhub.vo.AddMoneyTypeVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MoneyTypeController {
@@ -26,5 +23,10 @@ public class MoneyTypeController {
     @GetMapping("/moneyTypes")
     public Result getMoneyType(){
         return moneyTypeService.getMoneyType();
+    }
+
+    @GetMapping("/moneyType/{id}")
+    public Result getMoneyTypeById(@PathVariable("id") String id){
+        return moneyTypeService.getMoneyTypeById(id);
     }
 }

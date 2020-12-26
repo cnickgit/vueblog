@@ -3,7 +3,9 @@ package com.markerhub.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.markerhub.common.lang.Result;
 import com.markerhub.constant.PcConstant;
+import com.markerhub.entity.MoneyType;
 import com.markerhub.entity.ZyjToken;
+import com.markerhub.mapper.MoneyTypeMapper;
 import com.markerhub.mapper.ZyjTokenMapper;
 import com.markerhub.service.ZyjService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import sun.plugin.util.PluginConsoleController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,47 +34,29 @@ public class TokenController {
     private ZyjTokenMapper zyjTokenMapper;
 
     @Autowired
+    private MoneyTypeMapper moneyTypeMapper;
+
+    @Autowired
     private ZyjService zyjService;
 
     @GetMapping(value = "/addToken")
-    public Result addZyjToken(@RequestParam("type") String type, @RequestParam("num") Integer num){
-//        @RequestBody AddTokenVo addTokenVo
+    public Result addZyjToken(@RequestParam("typeId") String typeId, @RequestParam("num") Integer num){
+        MoneyType moneyType = moneyTypeMapper.selectById(typeId);
         List<ZyjToken> zyjTokens = new ArrayList<>();
         for(int i=0;i<num;i++){
             ZyjToken zyjToken = new ZyjToken();
             zyjToken.setId(UUID.randomUUID().toString());
-            zyjToken.setType(type);
+            zyjToken.setTypeId(typeId);
             zyjToken.setCode(UUID.randomUUID().toString());
             zyjToken.setCreateTime(new Date());
             zyjToken.setUpdateTime(new Date());
             zyjToken.setEnable("0");
             zyjToken.setExportStatus("0");
-            if(PcConstant.TYPE_ONE.equals(type)){
-                zyjToken.setPrescription(5);
-                zyjToken.setRemainingTimes(5);
-                zyjToken.setMoney(1);
-                zyjToken.setTypeRemarks("1元 5次 24小时有效");
-            }else if(PcConstant.TYPE_THREE.equals(type)){
-                zyjToken.setPrescription(30);
-                zyjToken.setRemainingTimes(30);
-                zyjToken.setMoney(3);
-                zyjToken.setTypeRemarks("3元 30次 24小时有效");
-            }else if(PcConstant.TYPE_FIVE.equals(type)){
-                zyjToken.setPrescription(60);
-                zyjToken.setRemainingTimes(60);
-                zyjToken.setMoney(5);
-                zyjToken.setTypeRemarks("5元 60次 24小时有效");
-            }else if(PcConstant.TYPE_EVENGHT.equals(type)){
-                zyjToken.setPrescription(50);
-                zyjToken.setRemainingTimes(50);
-                zyjToken.setMoney(8);
-                zyjToken.setTypeRemarks("8元 50次 不限制时间");
-            }else if(PcConstant.TYPE_TYEFIVE.equals(type)){
-                zyjToken.setPrescription(200);
-                zyjToken.setRemainingTimes(200);
-                zyjToken.setMoney(25);
-                zyjToken.setTypeRemarks("25元 200次 不限制时间");
-            }
+            zyjToken.setMoney(moneyType.getMoney());
+            zyjToken.setPrescription(moneyType.getQueryNum());
+            zyjToken.setRemainingTimes(moneyType.getQueryNum());
+            zyjToken.setTypeRemarks(moneyType.getRemarks());
+            zyjToken.setLimitTime(moneyType.getTimeType());
             zyjTokens.add(zyjToken);
         }
         int i = zyjTokenMapper.insertBatch(zyjTokens);
@@ -89,29 +74,15 @@ public class TokenController {
             return Result.fail("激活码无效");
         }
         if(PcConstant.ENABLE_NO.equals(zyjToken.getEnable())){
-            if(PcConstant.TYPE_ONE.equals(zyjToken.getType())){
-                Calendar cal = Calendar.getInstance();
-                zyjToken.setEnableTime(cal.getTime());
-                cal.add(Calendar.DATE, 1);//增加一天
-                zyjToken.setEndTime(cal.getTime());
-                zyjToken.setEnable("1");
-            }else if(PcConstant.TYPE_THREE.equals(zyjToken.getType())){
-                Calendar cal = Calendar.getInstance();
-                zyjToken.setEnableTime(cal.getTime());
-                cal.add(Calendar.DATE, 1);//增加一天
-                zyjToken.setEndTime(cal.getTime());
-                zyjToken.setEnable("1");
-            }else if(PcConstant.TYPE_FIVE.equals(zyjToken.getType())){
-                Calendar cal = Calendar.getInstance();
-                zyjToken.setEnableTime(cal.getTime());
-                cal.add(Calendar.DATE, 1);//增加一天
-                zyjToken.setEndTime(cal.getTime());
-                zyjToken.setEnable("1");
-            }else if(PcConstant.TYPE_EVENGHT.equals(zyjToken.getType())){
-                zyjToken.setEnable("1");
-            }else if(PcConstant.TYPE_TYEFIVE.equals(zyjToken.getType())){
-                zyjToken.setEnable("1");
-            }
+            zyjToken.setEnable("1");
+            Calendar cal = Calendar.getInstance();
+            zyjToken.setEnableTime(cal.getTime());
+            cal.add(Calendar.DATE, 1);//增加一天
+            zyjToken.setEndTime(cal.getTime());
+        }else if(PcConstant.ENABLE_YES.equals(zyjToken.getEnable())){
+            return Result.succ("启用成功");
+        }else if(PcConstant.ENABLE_EXPIRE.equals(zyjToken.getEnable())){
+            return Result.succ("您的激活码已过期");
         }
         int i=0;
         try {

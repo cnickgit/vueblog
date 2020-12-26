@@ -15,4 +15,5 @@ public class MoneyType implements Serializable {
     private Integer queryNum;
     private Date createTime;
     private Date updateTime;
+    private String remarks;
 }

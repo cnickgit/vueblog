@@ -2,6 +2,7 @@ package com.markerhub.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.markerhub.common.lang.Result;
+import com.markerhub.constant.PcConstant;
 import com.markerhub.entity.MoneyType;
 import com.markerhub.mapper.MoneyTypeMapper;
 import com.markerhub.service.MoneyTypeService;
@@ -27,6 +28,12 @@ public class MoneyTypeServiceImpl extends ServiceImpl<MoneyTypeMapper, MoneyType
     public Result addMoneyType(AddMoneyTypeVo addMoneyTypeVo) {
         try{
             MoneyType moneyType = new MoneyType();
+            String remarks = "";
+            if(PcConstant.TIME_TYPE_LIMIT.equals(addMoneyTypeVo.getTimeType())){
+                remarks = addMoneyTypeVo.getMoney() + "元"+addMoneyTypeVo.getQueryNum()+"次"+"24小时有效";
+            }else if(PcConstant.TIME_TYPE_NOT_LIMIT.equals(addMoneyTypeVo.getTimeType())){
+                remarks = addMoneyTypeVo.getMoney() + "元"+addMoneyTypeVo.getQueryNum()+"次"+"不限时间";
+            }
             int i = 0;
             if(!StringUtils.isEmpty(addMoneyTypeVo.getId())){
                 moneyType.setId(addMoneyTypeVo.getId());
@@ -34,6 +41,7 @@ public class MoneyTypeServiceImpl extends ServiceImpl<MoneyTypeMapper, MoneyType
                 moneyType.setTimeType(addMoneyTypeVo.getTimeType());
                 moneyType.setQueryNum(addMoneyTypeVo.getQueryNum());
                 moneyType.setUpdateTime(TimeUtil.getCurrentDate());
+                moneyType.setRemarks(remarks);
                 i = moneyTypeMapper.updateById(moneyType);
                 return Result.succ("修改成功");
             }else{
@@ -43,6 +51,7 @@ public class MoneyTypeServiceImpl extends ServiceImpl<MoneyTypeMapper, MoneyType
                 moneyType.setQueryNum(addMoneyTypeVo.getQueryNum());
                 moneyType.setCreateTime(TimeUtil.getCurrentDate());
                 moneyType.setUpdateTime(TimeUtil.getCurrentDate());
+                moneyType.setRemarks(remarks);
                 i = moneyTypeMapper.insert(moneyType);
                 return Result.succ("新增成功");
             }
@@ -61,6 +70,17 @@ public class MoneyTypeServiceImpl extends ServiceImpl<MoneyTypeMapper, MoneyType
         }catch (Exception e){
             log.error("获取金钱类型出现异常,异常原因:"+e.toString());
             return Result.fail("获取金钱类型出现异常,异常原因:"+e.toString());
+        }
+    }
+
+    @Override
+    public Result getMoneyTypeById(String id) {
+        try{
+            MoneyType moneyType = moneyTypeMapper.selectById(id);
+            return Result.succ(moneyType);
+        }catch (Exception e){
+            log.error("根据Id获取事件类型出现异常,异常原因:"+e.toString());
+            return Result.fail("根据Id获取事件类型出现异常,异常原因:"+e.toString());
         }
     }
 }

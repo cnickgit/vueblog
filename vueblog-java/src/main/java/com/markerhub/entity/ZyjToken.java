@@ -25,7 +25,7 @@ public class ZyjToken implements Serializable {
 
     private String code;
 
-    private String type;
+    private String typeId;
 
     /**
      * 类型说明
@@ -41,6 +41,8 @@ public class ZyjToken implements Serializable {
      * prescription
      */
     private Integer prescription;
+
+    private String limitTime;
     /**
      * 剩余次数
      */

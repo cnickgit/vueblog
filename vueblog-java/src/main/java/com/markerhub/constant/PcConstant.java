@@ -55,4 +55,8 @@ public class  PcConstant {
     public final static String LAVE_80 = "剩余80次";
 
     public final static String LAVE_1 = "剩余1次";
+
+    public final static String TIME_TYPE_LIMIT = "1";
+
+    public final static String TIME_TYPE_NOT_LIMIT = "2";
 }

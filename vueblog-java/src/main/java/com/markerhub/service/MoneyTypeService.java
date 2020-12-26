@@ -9,4 +9,6 @@ public interface MoneyTypeService extends IService<MoneyType> {
     public Result addMoneyType(AddMoneyTypeVo addMoneyTypeVo);
 
     public Result getMoneyType();
+
+    public Result getMoneyTypeById(String id);
 }
