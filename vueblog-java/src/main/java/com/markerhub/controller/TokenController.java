@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import sun.plugin.util.PluginConsoleController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -112,8 +110,8 @@ public class TokenController {
     }
 
     @GetMapping(value="/exportExcelAll")
-    public Result exportExcel(HttpServletRequest request, HttpServletResponse response,@RequestParam("num") Integer num) {
-        return zyjService.exportAllExcel(request,response,num);
+    public Result exportExcel(HttpServletRequest request, HttpServletResponse response,@RequestParam("typeId") String typeId) {
+        return zyjService.exportAllExcel(request,response,typeId);
     }
 
     @GetMapping(value="/money")

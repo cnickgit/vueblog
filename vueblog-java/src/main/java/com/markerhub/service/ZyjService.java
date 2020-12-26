@@ -19,6 +19,6 @@ public interface ZyjService extends IService<ZyjToken> {
 
     Result getZyjMy();
 
-    Result exportAllExcel(HttpServletRequest request, HttpServletResponse response,Integer num);
+    Result exportAllExcel(HttpServletRequest request, HttpServletResponse response,String typeId);
 
 }

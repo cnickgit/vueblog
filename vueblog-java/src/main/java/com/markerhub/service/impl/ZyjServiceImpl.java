@@ -358,13 +358,18 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
     }
 
     @Override
-    public Result exportAllExcel(HttpServletRequest request, HttpServletResponse response,Integer num) {
+    public Result exportAllExcel(HttpServletRequest request, HttpServletResponse response,String typeId) {
         try {
             //查询
-            List<TokenExcel> zyjTokens = zyjTokenMapper.queryNotEnableTokens(num);
+            List<TokenExcel> zyjTokens = zyjTokenMapper.queryNotEnableTokens(typeId);
+            List<String> codes = new ArrayList<>();
             for(TokenExcel token : zyjTokens){
-                String prifx = "http://182.92.126.206:8082/";
+                String prifx = "http://182.92.126.206:8081/";
+                codes.add(token.getCode());
                 token.setCode(prifx+token.getCode());
+            }
+            if(!CollectionUtils.isEmpty(codes)){
+                zyjTokenMapper.updateBatchExportStatus(codes);
             }
             return Result.succ(FileDownloadUtil.export(response, zyjTokens,TokenExcel.class));
         }catch (Exception e){

@@ -38,7 +38,7 @@
     </select>
 
     <select id="queryNotEnableTokens" resultType="com.markerhub.entity.TokenExcel">
-        select code as code,money as money,prescription as prescription,type_remarks as typeRemarks from zyj_token where enable = '0' limit #{num}
+        select code as code,money as money,prescription as prescription,type_remarks as typeRemarks from zyj_token where enable = '0' and export_status = '0' and type_id = #{typeId} limit 10000
     </select>
 
     <select id="queryToken" resultType="com.markerhub.entity.ZyjToken">
@@ -54,4 +54,12 @@
 	(SELECT sum(money) FROM zyj_token WHERE YEAR(end_time) = YEAR(NOW())  and enable = '2') as currentMonthMoney,
 	(SELECT sum(money) FROM zyj_token WHERE YEAR(end_time) = YEAR(NOW())  and enable = '2') as currentYearMoney
     </select>
+
+    <update id="updateBatchExportStatus" parameterType="java.util.List">
+     update zyj_token set export_status = '1' where code in
+     <foreach collection="codes" index="index" item="code"
+                 separator="," open="(" close=")">
+            #{code}
+     </foreach>
+    </update>
 </mapper>
