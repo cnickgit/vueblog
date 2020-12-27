@@ -52,6 +52,7 @@
   }
 </script>
 <style>
+  @import "./assets/style/skin.css";
   #app {
     max-width: 960px;
     margin: 0 auto;

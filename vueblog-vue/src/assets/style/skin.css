@@ -1,0 +1,105 @@
+body, html { width: 100%; height: 100%; margin: 0; padding: 0 }
+@media only screen and (max-width:480px) {
+    html { font-size: 128px }
+}
+@media only screen and (max-width:414px) {
+    html { font-size: 110.4px }
+}
+@media only screen and (max-width:412px) {
+    html { font-size: 109.86667px }
+}
+@media only screen and (max-width:400px) {
+    html { font-size: 106.66667px }
+}
+@media only screen and (max-width:393px) {
+    html { font-size: 104.8px }
+}
+@media only screen and (max-width:375px) {
+    html { font-size: 100px }
+}
+@media only screen and (max-width:360px) {
+    html { font-size: 96px }
+}
+@media only screen and (max-width:345px) {
+    html { font-size: 92px }
+}
+@media only screen and (max-width:320px) {
+    html { font-size: 85.33333px }
+}
+html { -webkit-text-size-adjust: none; font-size: 26.66667vw }
+@media only screen and (min-width:640px) {
+    html { font-size: 170.66667px }
+}
+body { font-size: 0 }
+img { max-width: 100%; width: auto; height: auto }
+/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+html { font-family: sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100% }
+body { margin: 0 }
+body, html { width: 100%; height: 100%; font-family: Helvetica Neue, Helvetica, Arial, Microsoft YaHei, \\5FAE\8F6F\96C5\9ED1, STXihei, \\534E\6587\7EC6\9ED1, serif }
+a { background-color: transparent; text-decoration: none; -webkit-tap-highlight-color: transparent }
+a:active, a:hover, a:visited { text-decoration: none; outline: 0 }
+abbr[title] { border-bottom: 1px dotted }
+b, strong { font-weight: 700 }
+dfn { font-style: italic }
+h1 { font-size: 2em; margin: .67em 0 }
+mark { background: #ff0; color: #000 }
+small { font-size: 80% }
+sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline }
+sup { top: -.5em }
+sub { bottom: -.25em }
+img { border: 0 }
+svg:not(:root) { overflow: hidden }
+figure { margin: 1em 40px }
+hr { box-sizing: content-box; height: 0 }
+pre { overflow: auto }
+code, kbd, pre, samp { font-family: monospace, monospace; font-size: 1em }
+button, input, optgroup, select, textarea { color: inherit; font: inherit; margin: 0 }
+button { overflow: visible }
+button, select { text-transform: none }
+button, html input[type=button], input[type=reset], input[type=submit] { -webkit-appearance: button; cursor: pointer }
+button[disabled], html input[disabled] { cursor: default }
+button::-moz-focus-inner {
+    border:0;
+    padding:0
+}
+input { line-height: normal;}
+input::-moz-focus-inner {
+    border:0;
+    padding:0
+}
+input[type=checkbox], input[type=radio] { box-sizing: border-box; padding: 0 }
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+    height:auto
+}
+input[type=search] { -webkit-appearance: textfield; box-sizing: content-box }
+input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-search-decoration {
+    -webkit-appearance:none
+}
+fieldset { border: 1px solid silver; margin: 0 2px; padding: .35em .625em .75em }
+legend { border: 0; padding: 0 }
+textarea { overflow: auto }
+optgroup { font-weight: 700 }
+td, th { padding: 0 }
+[hidefocus], body, button, input, keygen, legend, select, summary, textarea {
+    outline:0
+}
+* { border: 0; margin: 0; padding: 0 }
+*, :after, :before { box-sizing: border-box }
+body, html { width: 100%; height: 100% }
+img { max-width: 100%; width: auto\9; height: auto; -ms-interpolation-mode: bicubic }
+dd, div, dl, dt, form, h1, h2, h3, h4, h5, img, li, p, ul { border: 0 none; list-style: outside none none; margin: 0; padding: 0 }
+body { background: #fff; color: #555; font-size: 18px; margin: 0 auto; max-width: 640px }
+body, dd, div, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, img, li, ol, p, table, td, ul { margin: 0; padding: 0; border: 0 }
+* { margin: 0; outline: 0 none; padding: 0; vertical-align: baseline }
+body, div.navbar, header { margin: auto; max-width: 640px }
+body { color: #666; font-family: PingFangSC-Regular, Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial; font-size: 14px; line-height: 1.5 }
+input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
+    -webkit-appearance:none
+}
+* { box-sizing: border-box }
+a { text-decoration: none }
+li, ul { padding: 0; margin: 0 }
+li { list-style: none }
+em, i { font-style: normal }
+.bor:after{content: "";position: absolute;z-index: 1;pointer-events: none;border: 1px solid #ababab;top: 0;left: 0;background: none;right: -100%;bottom: -100%;-webkit-transform: scale(.5);-webkit-transform-origin: 0 0;transform: scale(.5);transform-origin: 0 0;}
+.borB:after{content: "";position: absolute;z-index: 1;pointer-events: none;border-bottom: 1px solid #ababab;top: 0;left: 0;background: none;right: -100%;bottom: -100%;-webkit-transform: scale(.5);-webkit-transform-origin: 0 0;transform: scale(.5);transform-origin: 0 0;}
