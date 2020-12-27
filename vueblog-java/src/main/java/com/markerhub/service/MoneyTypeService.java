@@ -11,4 +11,6 @@ public interface MoneyTypeService extends IService<MoneyType> {
     public Result getMoneyType();
 
     public Result getMoneyTypeById(String id);
+
+    public Result removeMoneyTypeById(String id);
 }

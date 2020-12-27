@@ -15,4 +15,8 @@
       select * from moneyType order by update_time desc
     </select>
 
+    <delete id="removeById" parameterType="string">
+        DELETE FROM moneyType WHERE id= #{id}
+    </delete>
+
 </mapper>

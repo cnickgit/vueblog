@@ -173,7 +173,6 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
         if("2".equals(token.getEnable())){
             return Result.fail("对不起，您的激活码已到期");
         }
-       //调用登录接口获取cookie查询次数
         List<ZyjUser> zyjUsers = zyjUserMapper.queryZyjUsers();
         //查询
         JSONObject jsonObject = null;

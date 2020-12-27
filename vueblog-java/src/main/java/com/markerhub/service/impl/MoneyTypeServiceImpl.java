@@ -12,6 +12,7 @@ import com.markerhub.vo.AddMoneyTypeVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -27,8 +28,9 @@ public class MoneyTypeServiceImpl extends ServiceImpl<MoneyTypeMapper, MoneyType
     @Override
     public Result addMoneyType(AddMoneyTypeVo addMoneyTypeVo) {
         try{
-            MoneyType moneyType = new MoneyType();
+
             String remarks = "";
+            MoneyType moneyType = null;
             if(PcConstant.TIME_TYPE_LIMIT.equals(addMoneyTypeVo.getTimeType())){
                 remarks = addMoneyTypeVo.getMoney() + "元"+addMoneyTypeVo.getQueryNum()+"次"+"24小时有效";
             }else if(PcConstant.TIME_TYPE_NOT_LIMIT.equals(addMoneyTypeVo.getTimeType())){
@@ -36,6 +38,7 @@ public class MoneyTypeServiceImpl extends ServiceImpl<MoneyTypeMapper, MoneyType
             }
             int i = 0;
             if(!StringUtils.isEmpty(addMoneyTypeVo.getId())){
+                moneyType = moneyTypeMapper.selectById(addMoneyTypeVo.getId());
                 moneyType.setId(addMoneyTypeVo.getId());
                 moneyType.setMoney(addMoneyTypeVo.getMoney());
                 moneyType.setTimeType(addMoneyTypeVo.getTimeType());
@@ -45,6 +48,7 @@ public class MoneyTypeServiceImpl extends ServiceImpl<MoneyTypeMapper, MoneyType
                 i = moneyTypeMapper.updateById(moneyType);
                 return Result.succ("修改成功");
             }else{
+                moneyType = new MoneyType();
                 moneyType.setId(UUIDUtil.getUUID());
                 moneyType.setMoney(addMoneyTypeVo.getMoney());
                 moneyType.setTimeType(addMoneyTypeVo.getTimeType());
@@ -82,5 +86,18 @@ public class MoneyTypeServiceImpl extends ServiceImpl<MoneyTypeMapper, MoneyType
             log.error("根据Id获取事件类型出现异常,异常原因:"+e.toString());
             return Result.fail("根据Id获取事件类型出现异常,异常原因:"+e.toString());
         }
+    }
+
+    @Override
+    public Result removeMoneyTypeById(String id) {
+        log.debug("id:---------------->"+id);
+        try{
+            int i = moneyTypeMapper.removeById(id);
+            return Result.succ("删除成功");
+        }catch (Exception e){
+            log.error("删除出现异常,异常原因:"+e.toString());
+            return Result.fail("删除出现异常,异常原因:"+e.toString());
+        }
+
     }
 }

@@ -20,6 +20,11 @@ public class MoneyTypeController {
         return moneyTypeService.addMoneyType(addMoneyTypeVo);
     }
 
+    @GetMapping("/remove/{id}")
+    public Result removeMoneyType(@PathVariable("id") String id){
+        return moneyTypeService.removeMoneyTypeById(id);
+    }
+
     @GetMapping("/moneyTypes")
     public Result getMoneyType(){
         return moneyTypeService.getMoneyType();
