@@ -219,6 +219,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
                 zyjTokenMapper.updateById(token);
                 this.setQuerySequence(user);
                 zyjUserMapper.updateById(user);
+                zyjUserMapper.updateBatchByIds(user.getId());
                 break;
             }
         }
