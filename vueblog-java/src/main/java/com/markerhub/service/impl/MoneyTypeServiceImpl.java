@@ -35,6 +35,14 @@ public class MoneyTypeServiceImpl extends ServiceImpl<MoneyTypeMapper, MoneyType
                 remarks = addMoneyTypeVo.getMoney() + "元"+addMoneyTypeVo.getQueryNum()+"次"+"24小时有效";
             }else if(PcConstant.TIME_TYPE_NOT_LIMIT.equals(addMoneyTypeVo.getTimeType())){
                 remarks = addMoneyTypeVo.getMoney() + "元"+addMoneyTypeVo.getQueryNum()+"次"+"不限时间";
+            }else if(PcConstant.TIME_TYPE_SEVEN.equals(addMoneyTypeVo.getTimeType())){
+                remarks = addMoneyTypeVo.getMoney() + "元"+addMoneyTypeVo.getQueryNum()+"次"+"7天有效";
+            }else if(PcConstant.TIME_TYPE_THIRTY.equals(addMoneyTypeVo.getTimeType())){
+                remarks = addMoneyTypeVo.getMoney() + "元"+addMoneyTypeVo.getQueryNum()+"次"+"30天有效";
+            }else if(PcConstant.TIME_TYPE_NINETY.equals(addMoneyTypeVo.getTimeType())){
+                remarks = addMoneyTypeVo.getMoney() + "元"+addMoneyTypeVo.getQueryNum()+"次"+"90天有效";
+            }else if(PcConstant.TIME_TYPE_ONE_HURND_EIGHT.equals(addMoneyTypeVo.getTimeType())){
+                remarks = addMoneyTypeVo.getMoney() + "元"+addMoneyTypeVo.getQueryNum()+"次"+"180天有效";
             }
             int i = 0;
             if(!StringUtils.isEmpty(addMoneyTypeVo.getId())){

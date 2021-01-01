@@ -69,4 +69,12 @@ public class  PcConstant {
     public final static String TIME_TYPE_LIMIT = "1";
 
     public final static String TIME_TYPE_NOT_LIMIT = "2";
+
+    public final static String TIME_TYPE_SEVEN = "3";
+
+    public final static String TIME_TYPE_THIRTY = "4";
+
+    public final static String TIME_TYPE_NINETY = "5";
+
+    public final static String TIME_TYPE_ONE_HURND_EIGHT = "6";
 }

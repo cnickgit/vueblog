@@ -72,11 +72,21 @@ public class TokenController {
             return Result.fail("激活码无效");
         }
         if(PcConstant.ENABLE_NO.equals(zyjToken.getEnable())){
-            zyjToken.setEnable("1");
-            if(PcConstant.NOT_LIMIT_TIME.equals(zyjToken.getLimitTime())){
-                Calendar cal = Calendar.getInstance();
-                zyjToken.setEnableTime(cal.getTime());
-                cal.add(Calendar.DATE, 1);//增加一天
+            Calendar cal = Calendar.getInstance();
+            if(PcConstant.YES_LIMIT_TIME.equals(zyjToken.getLimitTime())){
+                cal.add(Calendar.DATE, 1);
+                zyjToken.setEndTime(cal.getTime());
+            }else if(PcConstant.TIME_TYPE_SEVEN.equals(zyjToken.getLimitTime())){
+                cal.add(Calendar.DATE, 7);
+                zyjToken.setEndTime(cal.getTime());
+            }else if(PcConstant.TIME_TYPE_THIRTY.equals(zyjToken.getLimitTime())){
+                cal.add(Calendar.DATE, 30);
+                zyjToken.setEndTime(cal.getTime());
+            }else if(PcConstant.TIME_TYPE_NINETY.equals(zyjToken.getLimitTime())){
+                cal.add(Calendar.DATE, 90);
+                zyjToken.setEndTime(cal.getTime());
+            }else if(PcConstant.TIME_TYPE_ONE_HURND_EIGHT.equals(zyjToken.getLimitTime())){
+                cal.add(Calendar.DATE, 180);
                 zyjToken.setEndTime(cal.getTime());
             }
         }else if(PcConstant.ENABLE_YES.equals(zyjToken.getEnable())){
@@ -86,6 +96,7 @@ public class TokenController {
         }
         int i=0;
         try {
+            zyjToken.setEnable("1");
             i = zyjTokenMapper.updateById(zyjToken);
             if(i>0){
                 return Result.succ("token启动成功!");

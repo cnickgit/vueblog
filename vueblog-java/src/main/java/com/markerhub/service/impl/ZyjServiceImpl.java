@@ -218,9 +218,10 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
                 token.setRemainingTimes(token.getRemainingTimes() -1);
                 zyjTokenMapper.updateById(token);
                 this.setQuerySequence(user);
-                Integer queryNum = user.getQueryNum();
-                user.setQueryNum(queryNum++);
+                int queryNum = user.getQueryNum();
+                user.setQueryNum(++queryNum);
                 zyjUserMapper.updateById(user);
+                zyjUserMapper.updateUserByAccount(user.getAccount(),user.getQueryNum());
                 zyjUserMapper.updateBatchByIds(user.getId());
                 break;
             }

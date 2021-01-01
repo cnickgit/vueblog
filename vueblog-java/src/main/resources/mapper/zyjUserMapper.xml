@@ -28,4 +28,8 @@
             #{item.id}
         </foreach>
     </update>
+
+    <update id="updateUserByAccount">
+        update zyj_user set query_num = #{num} where account = #{account}
+    </update>
 </mapper>
