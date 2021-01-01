@@ -2,13 +2,18 @@ package com.markerhub.config;
 
 import com.markerhub.constant.PcConstant;
 import com.markerhub.entity.ZyjToken;
+import com.markerhub.entity.ZyjUser;
 import com.markerhub.mapper.ZyjTokenMapper;
+import com.markerhub.mapper.ZyjUserMapper;
 import net.sf.saxon.expr.instruct.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,6 +26,9 @@ import java.util.List;
 public class ScheduledTask {
     @Autowired
     private ZyjTokenMapper zyjTokenMapper;
+
+    @Autowired
+    private ZyjUserMapper zyjUserMapper;
 
     @Scheduled(cron = "0 0/5 * * * *")
     public void work(){
@@ -38,5 +46,18 @@ public class ScheduledTask {
             }
         }
         System.out.print("执行一次\n");
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void clearUp(){
+        List<ZyjUser> zyjUsers = zyjUserMapper.queryZyjUsers();
+        List<String> ids = new ArrayList<>();
+        for (ZyjUser user:zyjUsers) {
+            user.setQueryNum(0);
+            ids.add(user.getAccount());
+        }
+        if(!CollectionUtils.isEmpty(ids)){
+            zyjUserMapper.updateBatchByUserIds(ids);
+        }
     }
 }

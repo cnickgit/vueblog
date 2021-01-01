@@ -33,6 +33,16 @@ public class  PcConstant {
     public final static String TYPE_TYEFIVE = "5";
 
     /**
+     * 限制时间
+     */
+    public final static String YES_LIMIT_TIME = "1";
+    /**
+     * 不限时间
+     */
+    public final static String NOT_LIMIT_TIME = "2";
+
+
+    /**
      * 未启用
      */
     public final static String ENABLE_NO = "0";

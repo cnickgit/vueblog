@@ -28,4 +28,6 @@ public class ZyjUser implements Serializable {
 
     private String useStatus;
 
+    private Integer queryNum;
+
 }

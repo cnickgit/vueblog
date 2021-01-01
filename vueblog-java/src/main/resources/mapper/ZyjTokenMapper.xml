@@ -34,7 +34,7 @@
     </select>
 
     <select id="queryAllTokens" resultType="com.markerhub.entity.ZyjToken">
-        select * from zyj_token where enable = #{enableType} order by create_time desc
+        select * from zyj_token where enable = #{enableType} order by create_time desc limit 100
     </select>
 
     <select id="queryNotEnableTokens" resultType="com.markerhub.entity.TokenExcel">

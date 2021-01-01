@@ -73,10 +73,12 @@ public class TokenController {
         }
         if(PcConstant.ENABLE_NO.equals(zyjToken.getEnable())){
             zyjToken.setEnable("1");
-            Calendar cal = Calendar.getInstance();
-            zyjToken.setEnableTime(cal.getTime());
-            cal.add(Calendar.DATE, 1);//增加一天
-            zyjToken.setEndTime(cal.getTime());
+            if(PcConstant.NOT_LIMIT_TIME.equals(zyjToken.getLimitTime())){
+                Calendar cal = Calendar.getInstance();
+                zyjToken.setEnableTime(cal.getTime());
+                cal.add(Calendar.DATE, 1);//增加一天
+                zyjToken.setEndTime(cal.getTime());
+            }
         }else if(PcConstant.ENABLE_YES.equals(zyjToken.getEnable())){
             return Result.succ("启用成功");
         }else if(PcConstant.ENABLE_EXPIRE.equals(zyjToken.getEnable())){

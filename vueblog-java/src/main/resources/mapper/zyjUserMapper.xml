@@ -11,6 +11,7 @@
         <result column="serial_num" property="serialNum" />
         <result column="max_times" property="maxTimes"/>
         <result column="use_status" property="useStatus"/>
+        <result column="query_num" property="queryNum"/>
     </resultMap>
 
     <select id="queryZyjUsers" resultType="com.markerhub.entity.ZyjUser">
@@ -19,5 +20,12 @@
 
     <update id="updateBatchByIds" parameterType="string">
         update zyj_user set use_status = '停用' where id != #{id}
+    </update>
+
+    <update id="updateBatchByUserIds" parameterType="list">
+        update zyj_user set query_num = 0 where id in
+        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
     </update>
 </mapper>

@@ -10,4 +10,6 @@ public interface ZyjUserMapper extends BaseMapper<ZyjUser> {
     List<ZyjUser>  queryZyjUsers();
 
     Integer updateBatchByIds(@Param("id") String id);
+
+    Integer updateBatchByUserIds(@Param("ids") List<String> ids);
 }
