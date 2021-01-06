@@ -5,16 +5,15 @@ import com.markerhub.entity.ZyjToken;
 import com.markerhub.entity.ZyjUser;
 import com.markerhub.mapper.ZyjTokenMapper;
 import com.markerhub.mapper.ZyjUserMapper;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.saxon.expr.instruct.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @program: vueblog
@@ -23,6 +22,7 @@ import java.util.List;
  * @create: 2020-11-26 11:20
  **/
 @Component
+@Slf4j
 public class ScheduledTask {
     @Autowired
     private ZyjTokenMapper zyjTokenMapper;
@@ -45,11 +45,15 @@ public class ScheduledTask {
                 }
             }
         }
-        System.out.print("执行一次\n");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        log.error("每隔五分钟执行一次,执行时间:"+df.format(new Date()));
     }
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void clearUp(){
+        //设置日期格式
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        log.error("每天凌晨12点执行一次,执行时间:"+df.format(new Date()));
         List<ZyjUser> zyjUsers = zyjUserMapper.queryZyjUsers();
         List<String> ids = new ArrayList<>();
         for (ZyjUser user:zyjUsers) {

@@ -193,7 +193,11 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
             ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
             jsonObject = JSONObject.parseObject(response.getBody());
-            String result = jsonObject.get("result").toString();
+            Object aa = jsonObject.get("result");
+            if(aa == null){
+                continue;
+            }
+            String result = aa.toString();
             if("ns".equals(result)){
                 //cookies过期
                 user.setExpire("1");
