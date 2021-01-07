@@ -51,7 +51,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
         //cookies为空或者已过期
         if(StringUtils.isEmpty(user.getCookie()) || user.getExpire().equals("1")){
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://106.12.189.59/app/superscanPH/loginPH.jsp";
+            String url = "http://124.71.87.53/app/superscanPH/loginPH.jsp";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
@@ -70,7 +70,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
     public void setQuerySequence(ZyjUser user){
             //获取查询次数
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
+            String url = "http://124.71.87.53/app/superscanPH/opQuery.jsp";
             HttpHeaders headers = new HttpHeaders();
             List<String> cookies =new ArrayList<String>();
             /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
@@ -104,7 +104,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
 
     public boolean isNext(ZyjUser user){
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
+        String url = "http://124.71.87.53/app/superscanPH/opQuery.jsp";
         HttpHeaders headers = new HttpHeaders();
         List<String> cookies =new ArrayList<String>();
         /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
@@ -181,7 +181,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
                 continue;
             }
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
+            String url = "http://124.71.87.53/app/superscanPH/opQuery.jsp";
             HttpHeaders headers = new HttpHeaders();
             List<String> cookies =new ArrayList<String>();
             MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
@@ -247,7 +247,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
                 continue;
             }
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://106.12.189.59/app/superscanPH/opQuery.jsp";
+            String url = "http://124.71.87.53/app/superscanPH/opQuery.jsp";
             HttpHeaders headers = new HttpHeaders();
             MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
             List<String> cookies =new ArrayList<String>();

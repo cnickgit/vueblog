@@ -37,7 +37,7 @@ public class ZyjController {
     @GetMapping(value = "/zyjLogin")
     public Result zyjLog(){
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://106.12.189.59/app/superscanPH/loginPH.jsp";
+        String url = "http://124.71.87.53/app/superscanPH/loginPH.jsp";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
