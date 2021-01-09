@@ -236,8 +236,11 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
     @Override
     public Result searchMarking(String searchName, String code) {
         ZyjToken token = zyjTokenMapper.queryTokenByCode(code);
-        if(token == null || token.getPrescription() < 1){
+        if(token == null){
             return Result.fail("激活码失效");
+        }
+        if("2".equals(token.getEnable())){
+            return Result.fail("激活码已过期");
         }
         //调用登录接口获取cookie查询次数
         List<ZyjUser> zyjUsers = zyjUserMapper.queryZyjUsers();
@@ -280,13 +283,17 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
                 }
             }else if("wxnodata".equals(result)){
                 break;
-            }else{
-                token.setRemainingTimes(token.getRemainingTimes() -1);
-                zyjTokenMapper.updateById(token);
-                this.setQuerySequence(user);
-                zyjUserMapper.updateById(user);
+            }else {
                 break;
             }
+
+//            else{
+//                token.setRemainingTimes(token.getRemainingTimes() -1);
+//                zyjTokenMapper.updateById(token);
+//                this.setQuerySequence(user);
+//                zyjUserMapper.updateById(user);
+//                break;
+//            }
         }
         return Result.succ(jsonObject);
     }
@@ -371,7 +378,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
             List<TokenExcel> zyjTokens = zyjTokenMapper.queryNotEnableTokens(typeId);
             List<String> codes = new ArrayList<>();
             for(TokenExcel token : zyjTokens){
-                String prifx = "http://182.92.126.206:8081/";
+                String prifx = "http://182.92.126.206/#/HomePage?code=";
                 codes.add(token.getCode());
                 token.setCode(prifx+token.getCode());
             }
