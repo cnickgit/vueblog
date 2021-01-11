@@ -291,11 +291,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
                 }
             }else if("wxnodata".equals(result)){
                 break;
-            }else{
-//                token.setRemainingTimes(token.getRemainingTimes() -1);
-                zyjTokenMapper.updateById(token);
-                this.setQuerySequence(user);
-                zyjUserMapper.updateById(user);
+            }else {
                 break;
             }
         }
@@ -382,7 +378,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
             List<TokenExcel> zyjTokens = zyjTokenMapper.queryNotEnableTokens(typeId);
             List<String> codes = new ArrayList<>();
             for(TokenExcel token : zyjTokens){
-                String prifx = "http://182.92.126.206:8081/";
+                String prifx = "http://182.92.126.206/#/HomePage?code=";
                 codes.add(token.getCode());
                 token.setCode(prifx+token.getCode());
             }
