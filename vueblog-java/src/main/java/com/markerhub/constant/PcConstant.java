@@ -36,6 +36,9 @@ public class  PcConstant {
      * 限制时间
      */
     public final static String YES_LIMIT_TIME = "1";
+
+    public final static String ADDRESS = "49.234.132.215";
+
     /**
      * 不限时间
      */

@@ -51,7 +51,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
         //cookies为空或者已过期
         if(StringUtils.isEmpty(user.getCookie()) || user.getExpire().equals("1")){
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://124.71.87.53/app/superscanPH/loginPH.jsp";
+            String url = "http://"+PcConstant.ADDRESS+"/app/superscanPH/loginPH.jsp";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
@@ -70,7 +70,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
     public void setQuerySequence(ZyjUser user){
             //获取查询次数
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://124.71.87.53/app/superscanPH/opQuery.jsp";
+            String url = "http://"+PcConstant.ADDRESS+"/app/superscanPH/opQuery.jsp";
             HttpHeaders headers = new HttpHeaders();
             List<String> cookies =new ArrayList<String>();
             /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
@@ -104,7 +104,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
 
     public boolean isNext(ZyjUser user){
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http://124.71.87.53/app/superscanPH/opQuery.jsp";
+        String url = "http://"+PcConstant.ADDRESS+"/app/superscanPH/opQuery.jsp";
         HttpHeaders headers = new HttpHeaders();
         List<String> cookies =new ArrayList<String>();
         /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
@@ -181,7 +181,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
                 continue;
             }
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://124.71.87.53/app/superscanPH/opQuery.jsp";
+            String url = "http://"+PcConstant.ADDRESS+"/app/superscanPH/opQuery.jsp";
             HttpHeaders headers = new HttpHeaders();
             List<String> cookies =new ArrayList<String>();
             MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
@@ -236,8 +236,14 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
     @Override
     public Result searchMarking(String searchName, String code) {
         ZyjToken token = zyjTokenMapper.queryTokenByCode(code);
-        if(token == null || token.getPrescription() < 1){
-            return Result.fail("激活码失效");
+        if(token == null){
+            return Result.fail("无效的激活码");
+        }
+//        if(token.getRemainingTimes() < 1){
+//            return Result.fail("对不起，您的查询次数已用完");
+//        }
+        if("2".equals(token.getEnable())){
+            return Result.fail("对不起，您的激活码已到期");
         }
         //调用登录接口获取cookie查询次数
         List<ZyjUser> zyjUsers = zyjUserMapper.queryZyjUsers();
@@ -247,7 +253,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
                 continue;
             }
             RestTemplate restTemplate = new RestTemplate();
-            String url = "http://124.71.87.53/app/superscanPH/opQuery.jsp";
+            String url = "http://"+PcConstant.ADDRESS+"/app/superscanPH/opQuery.jsp";
             HttpHeaders headers = new HttpHeaders();
             MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
             List<String> cookies =new ArrayList<String>();
@@ -261,7 +267,12 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
             ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
             jsonObject = JSONObject.parseObject(response.getBody());
-            String result = jsonObject.get("result").toString();
+//            String result = jsonObject.get("result").toString();
+            Object aa = jsonObject.get("result");
+            if(aa == null){
+                continue;
+            }
+            String result = aa.toString();
             if("ns".equals(result)){
                 //token过期
                 //cookies过期
@@ -281,7 +292,7 @@ public class ZyjServiceImpl  extends ServiceImpl<ZyjTokenMapper, ZyjToken> imple
             }else if("wxnodata".equals(result)){
                 break;
             }else{
-                token.setRemainingTimes(token.getRemainingTimes() -1);
+//                token.setRemainingTimes(token.getRemainingTimes() -1);
                 zyjTokenMapper.updateById(token);
                 this.setQuerySequence(user);
                 zyjUserMapper.updateById(user);
