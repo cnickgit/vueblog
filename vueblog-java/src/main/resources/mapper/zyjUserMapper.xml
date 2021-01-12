@@ -15,7 +15,7 @@
     </resultMap>
 
     <select id="queryZyjUsers" resultType="com.markerhub.entity.ZyjUser">
-       select * from zyj_user order by serial_num asc
+       select * from zyj_user where port = '30001' order by serial_num asc
     </select>
 
     <select id="queryZyjUsersByPort" resultType="com.markerhub.entity.ZyjUser">
