@@ -26,6 +26,7 @@ public class ZyjUserServiceImpl extends ServiceImpl<ZyjUserMapper, ZyjUser> impl
         user.setPassword(zyjUser.getPassword());
         user.setCookie("");
         user.setExpire("0");
+        user.setPort(zyjUser.getPort());
         try{
             int i = zyjUserMapper.insert(user);
             if(i>0){
@@ -48,6 +49,18 @@ public class ZyjUserServiceImpl extends ServiceImpl<ZyjUserMapper, ZyjUser> impl
         }catch (Exception e){
             log.error("查询时出现异常,异常原因:"+e.toString());
             return Result.fail("查询时出现异常,异常原因:"+e.toString());
+        }
+    }
+
+    @Override
+    public Result findZyjUsersByPort(String port) {
+        List<ZyjUser> zyjUsers = null;
+        try{
+            zyjUsers = zyjUserMapper.queryZyjUsersByPort(port);
+            return Result.succ(zyjUsers);
+        }catch (Exception e){
+            log.error("根据端口查询时出现异常,异常原因:"+e.toString());
+            return Result.fail("根据端口查询时出现异常,异常原因:"+e.toString());
         }
     }
 }

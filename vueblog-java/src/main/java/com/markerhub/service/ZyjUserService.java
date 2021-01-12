@@ -10,4 +10,6 @@ public interface ZyjUserService extends IService<ZyjUser> {
     Result addZyjUser(ZyjUser zyjUser);
 
     Result findZyjUsers();
+
+    Result findZyjUsersByPort(String port);
 }

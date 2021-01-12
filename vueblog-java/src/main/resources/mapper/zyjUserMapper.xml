@@ -18,8 +18,12 @@
        select * from zyj_user order by serial_num asc
     </select>
 
+    <select id="queryZyjUsersByPort" resultType="com.markerhub.entity.ZyjUser">
+       select * from zyj_user where port=#{port} order by serial_num asc
+    </select>
+
     <update id="updateBatchByIds" parameterType="string">
-        update zyj_user set use_status = '停用' where id != #{id}
+        update zyj_user set use_status = '停用' where id != #{id} and port = #{port}
     </update>
 
     <update id="updateBatchByUserIds" parameterType="list">

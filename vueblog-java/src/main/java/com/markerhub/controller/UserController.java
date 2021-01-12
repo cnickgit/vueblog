@@ -50,4 +50,9 @@ public class UserController {
     public Result findUsers(){
         return zyjUserService.findZyjUsers();
     }
+
+    @GetMapping("/zyjUsersPort/{port}")
+    public Result findUsersByPort(@PathVariable("port") String port){
+        return zyjUserService.findZyjUsersByPort(port);
+    }
 }
