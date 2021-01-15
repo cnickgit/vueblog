@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.markerhub</groupId>
     <artifactId>zyj</artifactId>
-    <version>30001</version>
+    <version>40001</version>
     <name>vueblog</name>
     <description>Demo project for Spring Boot</description>
 

@@ -1,9 +1,9 @@
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 server:
-  port: 30001
+  port: 40001
 markerhub:
   jwt:
     secret: f4e2e52034348f86b67cde581c0f9eb5
