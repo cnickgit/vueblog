@@ -15,11 +15,11 @@
     </resultMap>
 
     <select id="queryZyjUsers" resultType="com.markerhub.entity.ZyjUser">
-       select * from zyj_user where port = '40001' order by serial_num asc
+       select * from zyj_user order by serial_num asc
     </select>
 
     <select id="queryZyjUsersByPort" resultType="com.markerhub.entity.ZyjUser">
-       select * from zyj_user where port=#{port} order by serial_num asc
+       select * from zyj_user order by serial_num asc
     </select>
 
     <update id="updateBatchByIds" parameterType="string">
@@ -27,7 +27,7 @@
     </update>
 
     <update id="updateBatchByUserIds" parameterType="list">
-        update zyj_user set query_num = 0 where id in
+        update zyj_user set query_num = 0 where account in
         <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
