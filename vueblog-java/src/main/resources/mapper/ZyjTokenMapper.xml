@@ -33,6 +33,14 @@
         select * from zyj_token where enable = '1'
     </select>
 
+    <select id="queryExpiredToken" resultType="com.markerhub.entity.ZyjToken">
+        select * from zyj_token where enable = '2'
+    </select>
+
+    <delete id="deleteExpiredTokens">
+        delete * from zyj_token where enable = '2'
+    </delete>
+
     <select id="queryAllTokens" resultType="com.markerhub.entity.ZyjToken">
         select * from zyj_token where enable = #{enableType} order by create_time desc limit 100
     </select>

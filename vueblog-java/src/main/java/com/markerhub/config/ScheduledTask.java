@@ -1,12 +1,10 @@
 package com.markerhub.config;
 
-import com.markerhub.constant.PcConstant;
 import com.markerhub.entity.ZyjToken;
 import com.markerhub.entity.ZyjUser;
 import com.markerhub.mapper.ZyjTokenMapper;
 import com.markerhub.mapper.ZyjUserMapper;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.saxon.expr.instruct.ForEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -63,5 +61,19 @@ public class ScheduledTask {
         if(!CollectionUtils.isEmpty(ids)){
             zyjUserMapper.updateBatchByUserIds(ids);
         }
+    }
+
+    @Scheduled(cron = "0 0 22 L * ? *")
+    public void clearExpired(){
+        Integer count = 0;
+        try {
+            count = zyjTokenMapper.deleteExpiredTokens();
+            log.info("删除过期的token数目为:"+count);
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            log.error("每隔五分钟执行一次,执行时间:"+df.format(new Date()));
+        }catch (Exception e){
+            log.error("删除token发生异常，异常原因:"+e.toString());
+        }
+
     }
 }

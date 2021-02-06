@@ -11,6 +11,10 @@ import java.util.List;
 public interface ZyjTokenMapper extends BaseMapper<ZyjToken> {
     public List<ZyjToken> queryEnableToken();
 
+    public List<ZyjToken> queryExpiredToken();
+
+    public Integer deleteExpiredTokens();
+
     public List<ZyjToken> queryAllTokens(@Param("enableType") String enableType);
 
     public List<TokenExcel> queryNotEnableTokens(@Param("typeId") String typeId);
