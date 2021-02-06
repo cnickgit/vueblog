@@ -35,10 +35,10 @@ public class ScheduledTask {
         List<ZyjToken> zyjTokens = zyjTokenMapper.queryEnableToken();
         Calendar cal = Calendar.getInstance();
         for(ZyjToken token : zyjTokens){
-//            System.out.println("time:"+token.getEndTime());
+            System.out.println("time:"+token.getEndTime());
             if(null != token.getEndTime()){
                 if(cal.getTime().compareTo(token.getEndTime()) > 0 || token.getRemainingTimes() < 1){
-//                    System.out.println("token过期了");
+                    System.out.println("token过期了");
                     //已过期
                     token.setEnable("2");
                     zyjTokenMapper.updateById(token);
@@ -46,7 +46,7 @@ public class ScheduledTask {
             }
         }
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        log.error("每隔五分钟执行一次,执行时间:"+df.format(new Date()));
+        log.error("每隔五分钟执行一次,执行时间:"+df.format(new Date()));
     }
 
     @Scheduled(cron = "0 5 0 * * ?")

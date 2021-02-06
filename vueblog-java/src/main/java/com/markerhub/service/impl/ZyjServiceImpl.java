@@ -379,7 +379,7 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
             List<String> codes = new ArrayList<>();
             for (TokenExcel token : zyjTokens) {
 //                String prifx = "http://182.92.126.206/#/HomePage?code=";
-                String prifx = "http://zyjch.vip/#/HomePage?code=";
+                String prifx = "https://zyjch.vip/#/HomePage?code=";
 
                 codes.add(token.getCode());
                 token.setCode(prifx + token.getCode());
