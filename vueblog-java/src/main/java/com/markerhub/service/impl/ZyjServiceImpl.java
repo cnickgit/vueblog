@@ -103,60 +103,64 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
     }
 
     public boolean isNext(ZyjUser user) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://" + PcConstant.ADDRESS + "/app/superscanPH/opQuery.jsp";
-        HttpHeaders headers = new HttpHeaders();
-        List<String> cookies = new ArrayList<String>();
-        /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
-        //在 header 中存入cookies
-        cookies.add(user.getCookie());
-        headers.put(HttpHeaders.COOKIE, cookies);
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("m", "mine");
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
-        JSONObject jsonObject = JSONObject.parseObject(response.getBody());
-        if ("ns".equals(jsonObject.get("result"))) {
-            //cookies过期
-            cookies.clear();
-            user.setExpire("1");
-            this.setCookies(user);
+        if (PcConstant.USE_STATUS_TY.equals(user.getUseStatus())) {
+            return false;
+        } else {
+            RestTemplate restTemplate = new RestTemplate();
+            String url = "http://" + PcConstant.ADDRESS + "/app/superscanPH/opQuery.jsp";
+            HttpHeaders headers = new HttpHeaders();
+            List<String> cookies = new ArrayList<String>();
+            /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
+            //在 header 中存入cookies
             cookies.add(user.getCookie());
             headers.put(HttpHeaders.COOKIE, cookies);
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
             map.add("m", "mine");
-            response = restTemplate.postForEntity(url, request, String.class);
-            jsonObject = JSONObject.parseObject(response.getBody());
-            String sycs = (String) jsonObject.get("qinf");
-            String leaveNum = sycs.split("/")[1];
-            String substring = leaveNum.substring(2);
-            String day = substring.substring(0, substring.indexOf("次"));
-            int num = Integer.parseInt(day);
-            user.setLeaveNum(leaveNum);
-            if (user.getMaxTimes() < num) {
-                user.setUseStatus("使用中");
-                return true;
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+            ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+            JSONObject jsonObject = JSONObject.parseObject(response.getBody());
+            if ("ns".equals(jsonObject.get("result"))) {
+                //cookies过期
+                cookies.clear();
+                user.setExpire("1");
+                this.setCookies(user);
+                cookies.add(user.getCookie());
+                headers.put(HttpHeaders.COOKIE, cookies);
+                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                map.add("m", "mine");
+                response = restTemplate.postForEntity(url, request, String.class);
+                jsonObject = JSONObject.parseObject(response.getBody());
+                String sycs = (String) jsonObject.get("qinf");
+                String leaveNum = sycs.split("/")[1];
+                String substring = leaveNum.substring(2);
+                String day = substring.substring(0, substring.indexOf("次"));
+                int num = Integer.parseInt(day);
+                user.setLeaveNum(leaveNum);
+                if (user.getMaxTimes() < num) {
+                    user.setUseStatus(PcConstant.USE_STATUS_YSY);
+                    return true;
+                } else {
+                    user.setUseStatus(PcConstant.USE_STATUS_TY);
+                    zyjUserMapper.updateById(user);
+                    return false;
+                }
             } else {
-                user.setUseStatus("停用");
-                zyjUserMapper.updateById(user);
-                return false;
-            }
-        } else {
-            String sycs = (String) jsonObject.get("qinf");
-            String leaveNum = sycs.split("/")[1];
-            user.setLeaveNum(leaveNum);
-            String substring = leaveNum.substring(2);
-            String day = substring.substring(0, substring.indexOf("次"));
-            int num = Integer.parseInt(day);
-            user.setLeaveNum(leaveNum);
-            if (user.getMaxTimes() < num) {
-                user.setUseStatus("使用中");
-                return true;
-            } else {
-                user.setUseStatus("停用");
-                zyjUserMapper.updateById(user);
-                return false;
+                String sycs = (String) jsonObject.get("qinf");
+                String leaveNum = sycs.split("/")[1];
+                user.setLeaveNum(leaveNum);
+                String substring = leaveNum.substring(2);
+                String day = substring.substring(0, substring.indexOf("次"));
+                int num = Integer.parseInt(day);
+                user.setLeaveNum(leaveNum);
+                if (user.getMaxTimes() < num) {
+                    user.setUseStatus("1");
+                    return true;
+                } else {
+                    user.setUseStatus("2");
+                    zyjUserMapper.updateById(user);
+                    return false;
+                }
             }
         }
     }
@@ -226,7 +230,7 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                 user.setQueryNum(++queryNum);
                 zyjUserMapper.updateById(user);
                 zyjUserMapper.updateUserByAccount(user.getAccount(), user.getQueryNum());
-                zyjUserMapper.updateBatchByIds(user.getId(),user.getPort());
+//                zyjUserMapper.updateBatchByIds(user.getId(), user.getPort());
                 break;
             }
         }

@@ -88,6 +88,9 @@ public class TokenController {
             }else if(PcConstant.TIME_TYPE_ONE_HURND_EIGHT.equals(zyjToken.getLimitTime())){
                 cal.add(Calendar.DATE, 180);
                 zyjToken.setEndTime(cal.getTime());
+            }else if(PcConstant.TIME_TYPE_ONE_YEAR.equals(zyjToken.getLimitTime())){
+                cal.add(Calendar.DATE, 360);
+                zyjToken.setEndTime(cal.getTime());
             }
         }else if(PcConstant.ENABLE_YES.equals(zyjToken.getEnable())){
             return Result.succ("启用成功");

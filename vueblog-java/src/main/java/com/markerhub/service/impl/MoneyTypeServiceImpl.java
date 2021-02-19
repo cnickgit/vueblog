@@ -43,6 +43,8 @@ public class MoneyTypeServiceImpl extends ServiceImpl<MoneyTypeMapper, MoneyType
                 remarks = addMoneyTypeVo.getMoney() + "元"+addMoneyTypeVo.getQueryNum()+"次"+"90天有效";
             }else if(PcConstant.TIME_TYPE_ONE_HURND_EIGHT.equals(addMoneyTypeVo.getTimeType())){
                 remarks = addMoneyTypeVo.getMoney() + "元"+addMoneyTypeVo.getQueryNum()+"次"+"180天有效";
+            }else if(PcConstant.TIME_TYPE_ONE_YEAR.equals(addMoneyTypeVo.getTimeType())){
+                remarks = addMoneyTypeVo.getMoney() + "元"+addMoneyTypeVo.getQueryNum()+"次"+"360天有效";
             }
             int i = 0;
             if(!StringUtils.isEmpty(addMoneyTypeVo.getId())){

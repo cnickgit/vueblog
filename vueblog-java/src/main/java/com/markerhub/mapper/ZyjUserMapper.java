@@ -9,6 +9,8 @@ import java.util.List;
 public interface ZyjUserMapper extends BaseMapper<ZyjUser> {
     List<ZyjUser>  queryZyjUsers();
 
+    List<ZyjUser>  queryAllZyjUsers();
+
     List<ZyjUser>  queryZyjUsersByPort(String port);
 
     Integer updateBatchByIds(@Param("id") String id,@Param("port") String port);

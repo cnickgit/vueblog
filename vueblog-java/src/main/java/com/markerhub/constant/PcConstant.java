@@ -44,6 +44,19 @@ public class  PcConstant {
      */
     public final static String NOT_LIMIT_TIME = "2";
 
+    /**
+     * 待使用
+     */
+    public final static String USE_STATUS_DSY = "0";
+    /**
+     * 已使用
+     */
+    public final static String USE_STATUS_YSY = "1";
+    /**
+     * 停用
+     */
+    public final static String USE_STATUS_TY = "2";
+
 
     /**
      * 未启用
@@ -80,4 +93,6 @@ public class  PcConstant {
     public final static String TIME_TYPE_NINETY = "5";
 
     public final static String TIME_TYPE_ONE_HURND_EIGHT = "6";
+
+    public final static String TIME_TYPE_ONE_YEAR = "7";
 }
