@@ -36,12 +36,17 @@ public class ScheduledTask {
         for (ZyjToken token : zyjTokens) {
             System.out.println("time:" + token.getEndTime());
             if (null != token.getEndTime()) {
-                if (cal.getTime().compareTo(token.getEndTime()) > 0 || token.getRemainingTimes() < 1) {
+                if (cal.getTime().compareTo(token.getEndTime()) > 0) {
                     System.out.println("token过期了");
                     //已过期
                     token.setEnable("2");
                     zyjTokenMapper.updateById(token);
                 }
+            } else if (token.getRemainingTimes() < 1) {
+                System.out.println("token过期了");
+                //已过期
+                token.setEnable("2");
+                zyjTokenMapper.updateById(token);
             }
         }
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
