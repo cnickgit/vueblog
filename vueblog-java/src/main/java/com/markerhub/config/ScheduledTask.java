@@ -59,7 +59,7 @@ public class ScheduledTask {
         //设置日期格式
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         log.error("每天凌晨12点10执行一次,执行时间:" + df.format(new Date()));
-        List<ZyjUser> zyjUsers = zyjUserMapper.queryZyjUsers();
+        List<ZyjUser> zyjUsers = zyjUserMapper.queryAllZyjUsers();
         List<String> ids = new ArrayList<>();
         for (ZyjUser user : zyjUsers) {
             user.setUseStatus(PcConstant.USE_STATUS_DSY);
@@ -88,6 +88,7 @@ public class ScheduledTask {
 
     @Scheduled(cron = "0 0 12 1 * ? ")
     public void clearExpired() {
+        //每个月的1号中午12点定时删除过期的token
         Integer count = 0;
         try {
             count = zyjTokenMapper.deleteExpiredTokens();
