@@ -141,8 +141,7 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                     user.setUseStatus(PcConstant.USE_STATUS_TY);
                     zyjUserMapper.updateById(user);
                     return false;
-                }
-                if (user.getMaxTimes() < num) {
+                }else if (user.getMaxTimes() < num) {
                     user.setUseStatus(PcConstant.USE_STATUS_YSY);
                     return true;
                 } else {
@@ -162,11 +161,10 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                     user.setUseStatus(PcConstant.USE_STATUS_TY);
                     zyjUserMapper.updateById(user);
                     return false;
-                }
-                if (user.getMaxTimes() < num) {
+                }else if (user.getMaxTimes() < num) {
                     user.setUseStatus(PcConstant.USE_STATUS_YSY);
                     return true;
-                } else {
+                }else {
                     user.setUseStatus(PcConstant.USE_STATUS_TY);
                     zyjUserMapper.updateById(user);
                     return false;
