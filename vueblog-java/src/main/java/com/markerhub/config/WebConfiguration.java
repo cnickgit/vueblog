@@ -46,6 +46,12 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry){
         List<String> excludePath = new ArrayList<>();
         //排除拦截
+        excludePath.add("/zyjLogin");
+        excludePath.add("/search");
+        excludePath.add("/searchMarking");
+        excludePath.add("/myRecord");
+        excludePath.add("/my");
+        excludePath.add("/enableToken");
         excludePath.add("/user/register");  //登录
         excludePath.add("/user/login");     //注册
         excludePath.add("/static/**");  //静态资源

@@ -95,4 +95,14 @@ public class  PcConstant {
     public final static String TIME_TYPE_ONE_HURND_EIGHT = "6";
 
     public final static String TIME_TYPE_ONE_YEAR = "7";
+
+    public final static int TIMES_180 = 180;
+
+    public final static int TIMES_100 = 100;
+
+    public final static int TIMES_20 = 20;
+
+    public final static int TIMES_1 = 1;
+
+
 }

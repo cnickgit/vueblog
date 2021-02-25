@@ -137,6 +137,9 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                 String day = substring.substring(0, substring.indexOf("次"));
                 int num = Integer.parseInt(day);
                 user.setLeaveNum(leaveNum);
+                if(num == PcConstant.TIMES_180 || num == PcConstant.TIMES_100 || num == PcConstant.TIMES_20 || num == PcConstant.TIMES_1){
+                    return false;
+                }
                 if (user.getMaxTimes() < num) {
                     user.setUseStatus(PcConstant.USE_STATUS_YSY);
                     return true;
@@ -153,6 +156,9 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                 String day = substring.substring(0, substring.indexOf("次"));
                 int num = Integer.parseInt(day);
                 user.setLeaveNum(leaveNum);
+                if(num == PcConstant.TIMES_180 || num == PcConstant.TIMES_100 || num == PcConstant.TIMES_20 || num == PcConstant.TIMES_1){
+                    return false;
+                }
                 if (user.getMaxTimes() < num) {
                     user.setUseStatus("1");
                     return true;
