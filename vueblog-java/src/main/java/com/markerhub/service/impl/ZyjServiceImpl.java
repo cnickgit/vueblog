@@ -138,6 +138,8 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                 int num = Integer.parseInt(day);
                 user.setLeaveNum(leaveNum);
                 if(num == PcConstant.TIMES_180 || num == PcConstant.TIMES_100 || num == PcConstant.TIMES_20 || num == PcConstant.TIMES_1){
+                    user.setUseStatus(PcConstant.USE_STATUS_TY);
+                    zyjUserMapper.updateById(user);
                     return false;
                 }
                 if (user.getMaxTimes() < num) {
@@ -157,13 +159,15 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                 int num = Integer.parseInt(day);
                 user.setLeaveNum(leaveNum);
                 if(num == PcConstant.TIMES_180 || num == PcConstant.TIMES_100 || num == PcConstant.TIMES_20 || num == PcConstant.TIMES_1){
+                    user.setUseStatus(PcConstant.USE_STATUS_TY);
+                    zyjUserMapper.updateById(user);
                     return false;
                 }
                 if (user.getMaxTimes() < num) {
-                    user.setUseStatus("1");
+                    user.setUseStatus(PcConstant.USE_STATUS_YSY);
                     return true;
                 } else {
-                    user.setUseStatus("2");
+                    user.setUseStatus(PcConstant.USE_STATUS_TY);
                     zyjUserMapper.updateById(user);
                     return false;
                 }
