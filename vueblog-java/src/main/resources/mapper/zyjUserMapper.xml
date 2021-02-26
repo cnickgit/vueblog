@@ -31,7 +31,7 @@
     </update>
 
     <update id="updateBatchByUserIds" parameterType="list">
-        update zyj_user set query_num = 0 where account in
+        update zyj_user set query_num = 0,use_status= '0' where account in
         <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>

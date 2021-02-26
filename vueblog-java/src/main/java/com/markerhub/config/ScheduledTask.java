@@ -62,7 +62,7 @@ public class ScheduledTask {
         List<ZyjUser> zyjUsers = zyjUserMapper.queryAllZyjUsers();
         List<String> ids = new ArrayList<>();
         for (ZyjUser user : zyjUsers) {
-            user.setUseStatus(PcConstant.USE_STATUS_DSY);
+//            user.setUseStatus(PcConstant.USE_STATUS_DSY);
             ids.add(user.getAccount());
         }
         if (!CollectionUtils.isEmpty(ids)) {
