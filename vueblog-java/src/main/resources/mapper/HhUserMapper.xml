@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markerhub.mapper.HhUserMapper">
+    <resultMap id="BaseResultMap" type="com.markerhub.entity.HhUser">
+        <id column="id" property="id" />
+        <result column="account" property="account" />
+        <result column="password" property="password" />
+        <result column="cookies" property="cookies" />
+        <result column="use_status" property="useStatus" />
+    </resultMap>
+
+    <select id="selectTopUser" resultType="com.markerhub.entity.HhUser">
+        select * from hh_user limit 1
+    </select>
+</mapper>

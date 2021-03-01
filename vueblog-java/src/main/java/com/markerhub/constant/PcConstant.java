@@ -33,6 +33,11 @@ public class  PcConstant {
     public final static String TYPE_TYEFIVE = "5";
 
     /**
+     * 备用地址
+     */
+    public final static String SPARE_ADDRESS = "https://api.chadianshang2.com/pc/check/checkCommonNum";
+
+    /**
      * 限制时间
      */
     public final static String YES_LIMIT_TIME = "1";
@@ -104,5 +109,7 @@ public class  PcConstant {
 
     public final static int TIMES_1 = 1;
 
+    public final static String USE_STATUS_ENABLE = "1";
 
+    public final static String USE_STATUS_NOT_ENABLE = "2";
 }
