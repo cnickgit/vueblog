@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface ZyjUserMapper extends BaseMapper<ZyjUser> {
+
     List<ZyjUser>  queryZyjUsers();
 
     List<ZyjUser>  queryAllZyjUsers();
@@ -18,4 +19,6 @@ public interface ZyjUserMapper extends BaseMapper<ZyjUser> {
     Integer updateBatchByUserIds(@Param("ids") List<String> ids);
 
     Integer updateUserByAccount(@Param("account") String account,@Param("num") int num);
+
+    Integer updateUserStatusByAccount(@Param("accounnt") String acccount);
 }

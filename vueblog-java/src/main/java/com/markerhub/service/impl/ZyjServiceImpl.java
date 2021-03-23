@@ -47,7 +47,7 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
     @Autowired
     private HhUserMapper hhUserMapper;
 
-    public void setCookies(ZyjUser user) {
+    public boolean setCookies(ZyjUser user) {
         //cookies为空或者已过期
         if (StringUtils.isEmpty(user.getCookie()) || user.getExpire().equals("1")) {
             RestTemplate restTemplate = new RestTemplate();
@@ -60,10 +60,30 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
             map.add("password", user.getPassword());
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
             ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
-            String s = response.getHeaders().get("Set-Cookie").get(0);
-            user.setCookie(s.split(";")[0] + ";");
-            user.setExpire("0");
-            zyjUserMapper.updateById(user);
+            JSONObject jsonObject = JSONObject.parseObject(response.getBody());
+            Object result = jsonObject.get("result");
+            if (null != result) {
+                if ("lpe".equals(result.toString())) {
+                        user.setUseStatus(PcConstant.USE_STATUS_PASSWORD_ERROR);
+//                        zyjUserMapper.updateById(user);
+                        zyjUserMapper.updateUserStatusByAccount(user.getAccount());
+                        return false;
+                }else {
+                    String s = response.getHeaders().get("Set-Cookie").get(0);
+                    user.setCookie(s.split(";")[0] + ";");
+                    user.setExpire("0");
+                    zyjUserMapper.updateById(user);
+                    return true;
+                }
+            }else {
+                String s = response.getHeaders().get("Set-Cookie").get(0);
+                user.setCookie(s.split(";")[0] + ";");
+                user.setExpire("0");
+                zyjUserMapper.updateById(user);
+                return true;
+            }
+        } else {
+            return true;
         }
     }
 
@@ -103,7 +123,7 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
     }
 
     public boolean isNext(ZyjUser user) {
-        if (PcConstant.USE_STATUS_TY.equals(user.getUseStatus())) {
+        if (PcConstant.USE_STATUS_TY.equals(user.getUseStatus()) || PcConstant.USE_STATUS_PASSWORD_ERROR.equals(user.getUseStatus())) {
             return false;
         } else {
             RestTemplate restTemplate = new RestTemplate();
@@ -124,7 +144,10 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                 //cookies过期
                 cookies.clear();
                 user.setExpire("1");
-                this.setCookies(user);
+                boolean b = this.setCookies(user);
+                if(false == b){
+                    return false;
+                }
                 cookies.add(user.getCookie());
                 headers.put(HttpHeaders.COOKIE, cookies);
                 headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -137,11 +160,11 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                 String day = substring.substring(0, substring.indexOf("次"));
                 int num = Integer.parseInt(day);
                 user.setLeaveNum(leaveNum);
-                if(num == PcConstant.TIMES_180 || num == PcConstant.TIMES_100 || num == PcConstant.TIMES_20 || num == PcConstant.TIMES_1){
+                if (num == PcConstant.TIMES_180 || num == PcConstant.TIMES_100 || num == PcConstant.TIMES_20 || num == PcConstant.TIMES_1) {
                     user.setUseStatus(PcConstant.USE_STATUS_TY);
                     zyjUserMapper.updateById(user);
                     return false;
-                }else if (user.getMaxTimes() < num) {
+                } else if (user.getMaxTimes() < num) {
                     user.setUseStatus(PcConstant.USE_STATUS_YSY);
                     return true;
                 } else {
@@ -157,14 +180,14 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                 String day = substring.substring(0, substring.indexOf("次"));
                 int num = Integer.parseInt(day);
                 user.setLeaveNum(leaveNum);
-                if(num == PcConstant.TIMES_180 || num == PcConstant.TIMES_100 || num == PcConstant.TIMES_20 || num == PcConstant.TIMES_1){
+                if (num == PcConstant.TIMES_180 || num == PcConstant.TIMES_100 || num == PcConstant.TIMES_20 || num == PcConstant.TIMES_1) {
                     user.setUseStatus(PcConstant.USE_STATUS_TY);
                     zyjUserMapper.updateById(user);
                     return false;
-                }else if (user.getMaxTimes() < num) {
+                } else if (user.getMaxTimes() < num) {
                     user.setUseStatus(PcConstant.USE_STATUS_YSY);
                     return true;
-                }else {
+                } else {
                     user.setUseStatus(PcConstant.USE_STATUS_TY);
                     zyjUserMapper.updateById(user);
                     return false;
@@ -190,7 +213,7 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
         JSONObject jsonObject = null;
         //备用方案
         HhUser hhUser = hhUserMapper.selectTopUser();
-        if(PcConstant.USE_STATUS_ENABLE.equals(hhUser.getUseStatus())){
+        if (PcConstant.USE_STATUS_ENABLE.equals(hhUser.getUseStatus())) {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
@@ -201,8 +224,8 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
             ResponseEntity<String> response = restTemplate.postForEntity(PcConstant.SPARE_ADDRESS, request, String.class);
             jsonObject = JSONObject.parseObject(response.getBody());
 
-            System.out.println("内容:"+jsonObject.toString());
-        }else {
+            System.out.println("内容:" + jsonObject.toString());
+        } else {
             //正规查号
             for (ZyjUser user : zyjUsers) {
                 if (!this.isNext(user)) {
@@ -230,7 +253,10 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                 if ("ns".equals(result)) {
                     //cookies过期
                     user.setExpire("1");
-                    this.setCookies(user);
+                    boolean b = this.setCookies(user);
+                    if(false == b){
+                        continue;
+                    }
                     /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
                     //在 header 中存入cookies
                     cookies.add(user.getCookie());

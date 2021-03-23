@@ -40,4 +40,10 @@
     <update id="updateUserByAccount">
         update zyj_user set query_num = #{num} where account = #{account}
     </update>
+
+    <update id="updateUserStatusByAccount">
+        update zyj_user set use_status = '3' where account = #{account}
+    </update>
+
+
 </mapper>

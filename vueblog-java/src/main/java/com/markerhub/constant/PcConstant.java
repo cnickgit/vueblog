@@ -62,6 +62,11 @@ public class  PcConstant {
      */
     public final static String USE_STATUS_TY = "2";
 
+    /**
+     *
+     */
+    public final static String USE_STATUS_PASSWORD_ERROR = "3";
+
 
     /**
      * 未启用
