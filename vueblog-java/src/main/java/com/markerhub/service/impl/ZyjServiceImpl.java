@@ -223,7 +223,8 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
             ResponseEntity<String> response = restTemplate.postForEntity(PcConstant.SPARE_ADDRESS, request, String.class);
             jsonObject = JSONObject.parseObject(response.getBody());
-
+            token.setRemainingTimes(token.getRemainingTimes() - 1);
+            zyjTokenMapper.updateById(token);
             System.out.println("内容:" + jsonObject.toString());
         } else {
             //正规查号
@@ -286,7 +287,13 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                 }
             }
         }
-        return Result.succ(jsonObject);
+        if(StringUtils.isEmpty(jsonObject)){
+            Result.succ(200,"账号不存在",jsonObject);
+            return Result.succ(jsonObject);
+        }else {
+            return Result.succ(jsonObject);
+        }
+
     }
 
     @Override

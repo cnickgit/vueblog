@@ -20,5 +20,5 @@ public interface ZyjUserMapper extends BaseMapper<ZyjUser> {
 
     Integer updateUserByAccount(@Param("account") String account,@Param("num") int num);
 
-    Integer updateUserStatusByAccount(@Param("accounnt") String acccount);
+    Integer updateUserStatusByAccount(@Param("account") String account);
 }
