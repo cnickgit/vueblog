@@ -9,36 +9,35 @@ import com.markerhub.mapper.HhUserMapper;
 import com.markerhub.mapper.ZyjTokenMapper;
 import com.markerhub.mapper.ZyjUserMapper;
 import com.markerhub.service.ZyjService;
-import com.markerhub.service.ZyjUserService;
 import com.markerhub.util.FileDownloadUtil;
+import com.markerhub.util.UUIDUtil;
 import com.markerhub.vo.TokenDto;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import com.sun.imageio.plugins.common.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
+import org.springframework.util.*;
 import org.springframework.web.client.RestTemplate;
+import sun.misc.BASE64Encoder;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.beans.Transient;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.*;
 
 @Service
 public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implements ZyjService {
+
+
+    static BASE64Encoder encoder = new sun.misc.BASE64Encoder();
 
     @Autowired
     private ZyjTokenMapper zyjTokenMapper;
@@ -64,18 +63,18 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
             Object result = jsonObject.get("result");
             if (null != result) {
                 if ("lpe".equals(result.toString())) {
-                        user.setUseStatus(PcConstant.USE_STATUS_PASSWORD_ERROR);
+                    user.setUseStatus(PcConstant.USE_STATUS_PASSWORD_ERROR);
 //                        zyjUserMapper.updateById(user);
-                        zyjUserMapper.updateUserStatusByAccount(user.getAccount());
-                        return false;
-                }else {
+                    zyjUserMapper.updateUserStatusByAccount(user.getAccount());
+                    return false;
+                } else {
                     String s = response.getHeaders().get("Set-Cookie").get(0);
                     user.setCookie(s.split(";")[0] + ";");
                     user.setExpire("0");
                     zyjUserMapper.updateById(user);
                     return true;
                 }
-            }else {
+            } else {
                 String s = response.getHeaders().get("Set-Cookie").get(0);
                 user.setCookie(s.split(";")[0] + ";");
                 user.setExpire("0");
@@ -145,7 +144,7 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                 cookies.clear();
                 user.setExpire("1");
                 boolean b = this.setCookies(user);
-                if(false == b){
+                if (false == b) {
                     return false;
                 }
                 cookies.add(user.getCookie());
@@ -255,7 +254,7 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                     //cookies过期
                     user.setExpire("1");
                     boolean b = this.setCookies(user);
-                    if(false == b){
+                    if (false == b) {
                         continue;
                     }
                     /* 登录获取Cookie 这里是直接给Cookie，可使用下方的login方法拿到Cookie给入*/
@@ -287,13 +286,111 @@ public class ZyjServiceImpl extends ServiceImpl<ZyjTokenMapper, ZyjToken> implem
                 }
             }
         }
-        if(StringUtils.isEmpty(jsonObject)){
-            Result.succ(200,"账号不存在",jsonObject);
+        if (StringUtils.isEmpty(jsonObject)) {
+            Result.succ(200, "账号不存在", jsonObject);
             return Result.succ(jsonObject);
-        }else {
-            return Result.succ(jsonObject);
+        } else {
+            //下载图片到本地
+            Map<String,String> returnMap = getPictureUrl(jsonObject);
+            returnMap.put("jsonObject",jsonObject.toJSONString());
+            return Result.succ(returnMap);
         }
 
+    }
+
+
+    public Map<String, String> getPictureUrl(JSONObject jsonObject) {
+        Map<String,String> map = new HashMap<>();
+        map.put("baseImg",(String)jsonObject.get("baseImg"));
+        map.put("downImg",(String)jsonObject.get("downImg"));
+        URL url = null;
+        String downPath = "";
+        File file = null;
+        String uuid = "";
+        Map<String, String> headers = new HashMap<String, String>();
+        headers.put("Host","i.cy1788.com");
+        headers.put("Referer","http://49.234.132.215/");
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        Map<String,String> returnMap = new HashMap<>();
+        for(Map.Entry<String, String> entry : map.entrySet()){
+            if("baseImg".equals(entry.getKey())){
+                try {
+                    returnMap.put("baseImg","");
+//                    String baseImgPath = path + "baseImg";
+//                    file = new File(baseImgPath);
+//                    if(!file.exists()){
+//                        file.mkdir();
+//                    }
+//                    String baseImgUuid = UUIDUtil.getUUID();
+//                    downPath = baseImgPath + "/" + baseImgUuid + ".png";
+//                    returnMap.put("baseImg",baseImgUuid + ".png");
+                    downloadImageWithHeaders(returnMap,entry.getValue(),"PNG",new File(downPath),headers);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else if("downImg".equals(entry.getKey())){
+                try {
+                    returnMap.put("downImg","");
+//                    String baseImgPath = path + "downImg";
+//                    file = new File(baseImgPath);
+//                    if(!file.exists()){
+//                        file.mkdir();
+//                    }
+//                    String downImgUuid = UUIDUtil.getUUID();
+//                    downPath = baseImgPath + "/" + downImgUuid + ".png";
+//                    returnMap.put("downImg",downImgUuid + ".png");
+                    downloadImageWithHeaders(returnMap,entry.getValue(),"PNG",new File(downPath),headers);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return returnMap;
+    }
+
+    public static Map<String,String> downloadImageWithHeaders(Map<String,String> returnMap, String imageUrl, String formatName, File localFile, Map<String, String> headers) {
+        boolean isSuccess = false;
+        InputStream stream = null;
+        try {
+            URL url = new URL(imageUrl);
+            URLConnection conn = url.openConnection();
+            if (headers != null && !headers.isEmpty()) {
+                //设置头信息
+                for (Map.Entry<String, String> entry : headers.entrySet()) {
+                    conn.setRequestProperty(entry.getKey(), entry.getValue());
+                }
+            }
+            conn.setDoInput(true);
+            stream = conn.getInputStream();
+            BufferedImage bufferedImg = ImageIO.read(stream);
+            if (bufferedImg != null) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(bufferedImg, "jpg", baos);
+                byte[] bytes = baos.toByteArray();
+                String s = encoder.encodeBuffer(bytes).trim();
+                if(returnMap.containsKey("baseImg")){
+                    returnMap.put("baseImg",s);
+                }else if(returnMap.containsKey("downImg")){
+                    returnMap.put("downImg",s);
+                }
+//                isSuccess = ImageIO.write(bufferedImg, formatName, localFile);
+            } else {
+                throw new RuntimeException("图片[" + imageUrl + "]下载失败");
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return returnMap;
     }
 
     @Override
